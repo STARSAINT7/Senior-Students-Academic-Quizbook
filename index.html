@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Academic Quizbook - Senior Class (50 Questions)</title>
+  <style>
+    /* Reset & Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1d0936, #4b1248, #f0426b);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      padding: 20px;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Main Card Container */
+    .app-card {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(15px);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 24px;
+      padding: 30px;
+      max-width: 650px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Header & Animated Titles */
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      text-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f;
+      letter-spacing: 1px;
+    }
+
+    .creator-badge {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 6px 16px;
+      background: linear-gradient(90deg, #ff8a00, #e52e71);
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 15px rgba(229, 46, 113, 0.4);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    /* Floating Pop-Up Banner */
+    .popup-banner {
+      position: absolute;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ffea00;
+      color: #000;
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      animation: popDown 8s ease-in-out infinite;
+      z-index: 10;
+      white-space: nowrap;
+    }
+
+    @keyframes popDown {
+      0%, 80%, 100% { top: -60px; }
+      15%, 65% { top: 12px; }
+    }
+
+    /* Stage / Class Badge */
+    .stage-badge {
+      display: inline-block;
+      background: #00f2fe;
+      color: #000;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      margin-top: 5px;
+      text-transform: uppercase;
+    }
+
+    /* Input Controls */
+    .input-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 700;
+      color: #00f2fe;
+      font-size: 1rem;
+    }
+
+    .name-input {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 14px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      background: rgba(0, 0, 0, 0.4);
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+    .name-input:focus {
+      border-color: #00f2fe;
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+    }
+
+    /* Screens */
+    .start-screen, .subject-screen {
+      text-align: center;
+      padding: 10px 10px;
+    }
+
+    .start-screen h2, .subject-screen h2 {
+      font-size: 1.8rem;
+      color: #00f2fe;
+      margin-bottom: 15px;
+    }
+
+    .info-box {
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: left;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .info-box li {
+      margin-bottom: 10px;
+      list-style-type: none;
+      font-size: 0.95rem;
+    }
+
+    .mode-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 15px;
+      max-height: 360px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+
+    .mode-buttons::-webkit-scrollbar {
+      width: 6px;
+    }
+    .mode-buttons::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+    }
+
+    .start-btn {
+      background: linear-gradient(90deg, #00ff87, #60efff);
+      color: #000;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 0 12px rgba(0, 255, 135, 0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .start-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 20px rgba(0, 255, 135, 0.7);
+    }
+
+    .btn-back {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      margin-top: 15px;
+    }
+
+    /* Timer Bar & Info */
+    .timer-badge {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid #00f2fe;
+      color: #00f2fe;
+      font-size: 1.1rem;
+      font-weight: 800;
+      text-align: center;
+      padding: 8px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+    }
+
+    .progress-container {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      height: 10px;
+      width: 100%;
+      margin-bottom: 15px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      background: linear-gradient(90deg, #00f2fe, #4facfe);
+      height: 100%;
+      width: 1%;
+      transition: width 0.3s ease;
+    }
+
+    .quiz-info {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #ffe600;
+    }
+
+    /* Question & Options */
+    .quiz-screen {
+      display: none;
+    }
+
+    .question-text {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      line-height: 1.4;
+      min-height: 50px;
+    }
+
+    .options-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .option-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      padding: 12px 16px;
+      border-radius: 14px;
+      color: #fff;
+      font-size: 0.95rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 500;
+    }
+
+    .option-btn:hover:not([disabled]) {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .option-btn.correct {
+      background: #00e676 !important;
+      border-color: #ffffff !important;
+      color: #000 !important;
+      font-weight: bold;
+      box-shadow: 0 0 12px #00e676;
+    }
+
+    .option-btn.wrong {
+      background: #ff1744 !important;
+      border-color: #ffffff !important;
+      color: #fff !important;
+      box-shadow: 0 0 12px #ff1744;
+    }
+
+    .nav-btns {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    .btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: transform 0.2s ease;
+    }
+
+    .btn:active { transform: scale(0.95); }
+
+    .btn-prev { background: rgba(255, 255, 255, 0.2); color: #fff; }
+    .btn-next { background: #00f2fe; color: #000; }
+    .btn-submit { background: #00ff87; color: #000; }
+
+    .score-screen {
+      text-align: center;
+      display: none;
+    }
+
+    .score-badge {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: #ffe600;
+      text-shadow: 0 0 20px rgba(255, 230, 0, 0.6);
+      margin: 15px 0;
+    }
+
+    .action-btn {
+      background: linear-gradient(90deg, #ff8a00, #e52e71);
+      color: #fff;
+      padding: 14px 30px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin: 10px 5px 0 5px;
+    }
+
+    @media (max-width: 600px) {
+      .app-card {
+        padding: 20px 15px;
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
+      .question-text {
+        font-size: 1.05rem;
+      }
+      .btn {
+        padding: 10px 14px;
+        font-size: 0.85rem;
+      }
+    }
+  
+    /* In-page dialog (works even where the browser blocks alert/confirm pop-ups) */
+    .dialog-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 20px;
+    }
+    .dialog-box {
+      background: #2b1240;
+      border: 2px solid #00f2fe;
+      border-radius: 16px;
+      padding: 25px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      color: #fff;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    }
+    .dialog-box p { margin: 0 0 20px 0; font-size: 1.05rem; line-height: 1.5; }
+    .dialog-actions { display: flex; gap: 10px; justify-content: center; }
+  </style>
+</head>
+<body>
+
+  <div class="app-card">
+    <div class="popup-banner">✨🎓 SENIOR CLASS ACADEMIC QUIZBOOK 🎓✨</div>
+
+    <header>
+      <h1>Academic Quizbook</h1>
+      <div class="creator-badge">DEVELOPED BY EVANG. THANKGOD OKODUWA</div>
+    </header>
+
+    <!-- Start / Landing Screen -->
+    <div class="start-screen" id="start-screen">
+      <h2>Welcome, Senior Class Student</h2>
+      
+      <div class="input-group">
+        <label for="player-name">Enter Student Name:</label>
+        <input type="text" id="player-name" class="name-input" placeholder="e.g. Fatima Idris" autocomplete="off">
+      </div>
+
+      <div class="info-box">
+        <ul>
+          <li>📚 <strong>14 Subjects Available:</strong> Mathematics, English Language, Physics, Chemistry, Biology, Economics, Government, Literature-in-English, Geography, Agricultural Science, Computer Studies, Civic Education, CRS, and Financial Accounting.</li>
+          <li>📝 <strong>50 Distinct Questions</strong> per subject.</li>
+          <li>⏱️ <strong>Time Limit:</strong> 30 Minutes per subject test.</li>
+        </ul>
+      </div>
+
+      <div class="mode-buttons">
+        <button class="start-btn" onclick="openSubjectSelection()">ENTER SENIOR CLASS</button>
+      </div>
+    </div>
+
+    <!-- Subject Selection Screen -->
+    <div class="subject-screen" id="subject-screen" style="display: none;">
+      <h2>Select a Subject</h2>
+      <p style="margin-bottom: 15px; color: #ffe600;">Choose from the 14 subjects below (50 Questions each):</p>
+
+      <div class="mode-buttons" id="subject-buttons-container">
+        <!-- 13 Subjects rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div class="quiz-screen" id="quiz-screen">
+      <div style="text-align: center; margin-bottom: 10px;">
+        <span class="stage-badge" id="current-stage-tag">SENIOR CLASS</span>
+      </div>
+      <div class="timer-badge" id="timer-display">⏱ Time Remaining: 30:00</div>
+
+      <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+
+      <div class="quiz-info">
+        <span id="question-count">Question 1 of 50</span>
+        <span id="score-tracker">Score: 0</span>
+      </div>
+
+      <div class="question-text" id="question-text">Loading question...</div>
+
+      <div class="options-grid" id="options-container"></div>
+
+      <div class="nav-btns">
+        <button class="btn btn-prev" id="prev-btn" onclick="changeQuestion(-1)">Previous</button>
+        <button class="btn btn-submit" onclick="confirmSubmit()">Submit Quiz</button>
+        <button class="btn btn-next" id="next-btn" onclick="changeQuestion(1)">Next</button>
+      </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div class="score-screen" id="score-screen">
+      <h2 id="stage-result-title">Quiz Completed! 🎉</h2>
+      <p style="margin-top: 10px; font-size: 1.1rem;">Thank you for completing the test!</p>
+      
+      <div class="score-badge" id="final-score">0 / 50</div>
+
+      <p id="feedback-text" style="font-size: 1.2rem; font-weight: 600; line-height: 1.4; padding: 0 10px;"></p>
+      <p style="margin-top: 15px; color: #ffea00;">Senior Class Quizbook Application</p>
+
+      <div id="action-buttons-container">
+        <button class="action-btn" onclick="restartQuiz()">Choose Another Subject</button>
+      </div>
+    </div>
+  </div>
+
+    <div id="dialog-overlay" class="dialog-overlay">
+    <div class="dialog-box">
+      <p id="dialog-message"></p>
+      <div class="dialog-actions">
+        <button id="dialog-no" class="btn btn-prev">Cancel</button>
+        <button id="dialog-yes" class="btn btn-submit">OK</button>
+      </div>
+    </div>
+  </div>
+<script>
+    // Full 50 distinct questions database for all 14 Senior Class subjects
+    const seniorClassSubjects = {
+      "Mathematics": [
+        { q: "Evaluate: log₁₀ 1000 + log₂ 8 − log₃ 9", options: ["4", "6", "2", "8"], answer: 0 },
+        { q: "Solve for x: 2^(x+1) = 32", options: ["6", "4", "5", "3"], answer: 1 },
+        { q: "Simplify: √75 − √12", options: ["√63", "3√3", "2√3", "5√3"], answer: 1 },
+        { q: "Rationalise: 6/√3", options: ["√3/2", "3√2", "2√3", "6√3"], answer: 2 },
+        { q: "Solve the quadratic equation x² − 5x − 14 = 0.", options: ["x = 7 or x = −2", "x = −7 or x = 2", "x = 5 or x = 14", "x = 14 or x = −1"], answer: 0 },
+        { q: "The roots of a quadratic equation are 3 and −4. The equation is:", options: ["x² − x − 12 = 0", "x² + 7x + 12 = 0", "x² − 7x − 12 = 0", "x² + x − 12 = 0"], answer: 3 },
+        { q: "The discriminant of 2x² − 4x + 5 = 0 is:", options: ["36", "−24", "−4", "24"], answer: 1 },
+        { q: "The 10th term of the AP 4, 7, 10, 13, ... is:", options: ["31", "30", "33", "34"], answer: 0 },
+        { q: "The sum of the first 12 terms of the AP 5, 8, 11, ... is:", options: ["264", "240", "258", "276"], answer: 2 },
+        { q: "The 6th term of the GP 2, 6, 18, ... is:", options: ["1,458", "486", "162", "972"], answer: 1 },
+        { q: "The sum to infinity of the GP 12, 4, 4/3, ... is:", options: ["16", "12", "18", "24"], answer: 2 },
+        { q: "If U = {1,2,...,10}, A = {even numbers} and B = {multiples of 3}, find n(A ∪ B).", options: ["6", "8", "9", "7"], answer: 3 },
+        { q: "In a class of 40, 25 offer Maths, 20 offer Physics and 8 offer neither. How many offer both?", options: ["15", "8", "13", "12"], answer: 2 },
+        { q: "Find the value of sin 30° + cos 60° + tan 45°.", options: ["1", "2", "1.5", "√3"], answer: 1 },
+        { q: "In a right-angled triangle, the hypotenuse is 13 cm and one side is 5 cm. The other side is:", options: ["18 cm", "12 cm", "144 cm", "8 cm"], answer: 1 },
+        { q: "Find the angle of elevation of the top of a 20 m tower from a point 20 m from its base.", options: ["30°", "60°", "45°", "90°"], answer: 2 },
+        { q: "In triangle ABC, a = 7, b = 8, C = 60°. Find c² (cosine rule).", options: ["25", "169", "57", "113"], answer: 2 },
+        { q: "The length of an arc of a circle of radius 14 cm subtending 90° at the centre (π = 22/7) is:", options: ["88 cm", "44 cm", "11 cm", "22 cm"], answer: 3 },
+        { q: "The area of a sector of radius 7 cm with angle 120° (π = 22/7) is:", options: ["102.67 cm²", "154 cm²", "51.33 cm²", "77 cm²"], answer: 2 },
+        { q: "In a cyclic quadrilateral, opposite angles are:", options: ["Supplementary", "Right angles", "Complementary", "Equal"], answer: 0 },
+        { q: "The gradient of the line 3y − 6x + 12 = 0 is:", options: ["2", "6", "−2", "3"], answer: 0 },
+        { q: "The equation of a line passing through (2, 3) with gradient 4 is:", options: ["y = 4x − 5", "y = 3x − 2", "y = 4x + 5", "y = 4x − 3"], answer: 0 },
+        { q: "The distance between the points (1, 2) and (4, 6) is:", options: ["25 units", "5 units", "7 units", "√7 units"], answer: 1 },
+        { q: "The midpoint of the line joining (−2, 4) and (6, 10) is:", options: ["(2, 3)", "(4, 14)", "(8, 14)", "(2, 7)"], answer: 3 },
+        { q: "Differentiate y = 3x⁴ − 5x² + 7 with respect to x.", options: ["3x³ − 10x", "12x⁴ − 10x", "12x³ − 5x", "12x³ − 10x"], answer: 3 },
+        { q: "Find the gradient of the curve y = x³ − 2x at x = 2.", options: ["10", "4", "6", "8"], answer: 0 },
+        { q: "Evaluate the integral of 6x² dx.", options: ["3x³ + C", "12x + C", "6x³ + C", "2x³ + C"], answer: 3 },
+        { q: "If A = [[2,1],[3,4]], the determinant of A is:", options: ["5", "−5", "11", "8"], answer: 0 },
+        { q: "If y varies inversely as x and y = 6 when x = 4, find y when x = 8.", options: ["12", "2", "3", "6"], answer: 2 },
+        { q: "If P varies directly as the square of Q and P = 18 when Q = 3, find P when Q = 5.", options: ["90", "45", "50", "30"], answer: 2 },
+        { q: "Solve the inequality: 3x − 7 > 11", options: ["x < 6", "x > 6", "x > 4", "x > 18"], answer: 1 },
+        { q: "Number of ways of arranging the letters of the word 'BOOK' is:", options: ["24", "8", "6", "12"], answer: 3 },
+        { q: "In how many ways can a committee of 3 be chosen from 7 people?", options: ["21", "210", "35", "42"], answer: 2 },
+        { q: "A fair coin is tossed three times. The probability of exactly two heads is:", options: ["3/8", "1/2", "1/4", "1/8"], answer: 0 },
+        { q: "The probability of drawing two red balls without replacement from a bag of 5 red and 3 blue is:", options: ["5/8", "5/16", "5/14", "25/64"], answer: 2 },
+        { q: "Find the median of the numbers 4, 9, 2, 7, 5, 10, 3 .", options: ["6", "4", "7", "5"], answer: 3 },
+        { q: "The mean of 5 numbers is 12. When a sixth number is included, the mean becomes 13. The sixth number is:", options: ["16", "25", "18", "15"], answer: 2 },
+        { q: "Express 0.0000372 in standard form.", options: ["3.72 × 10⁵", "37.2 × 10⁻⁶", "3.72 × 10⁻⁴", "3.72 × 10⁻⁵"], answer: 3 },
+        { q: "Evaluate: (0.25)^(−1/2)", options: ["4", "0.5", "1/2", "2"], answer: 3 },
+        { q: "A man invests ₦200,000 at 10% compound interest per annum. The amount after 2 years is:", options: ["₦220,000", "₦242,000", "₦244,000", "₦240,000"], answer: 1 },
+        { q: "A machine depreciates at 20% per annum. If it costs ₦500,000 now, its value after 2 years is:", options: ["₦300,000", "₦320,000", "₦350,000", "₦400,000"], answer: 1 },
+        { q: "Make r the subject of the formula V = πr²h.", options: ["r = √(V/πh)", "r = (V/πh)²", "r = √V/πh", "r = V/πh"], answer: 0 },
+        { q: "If f(x) = 2x² − 3x + 1, find f(−2).", options: ["11", "−13", "3", "15"], answer: 3 },
+        { q: "The inverse of the function f(x) = 3x − 4 is:", options: ["f⁻¹(x) = (x − 4)/3", "f⁻¹(x) = 3x + 4", "f⁻¹(x) = (x + 4)/3", "f⁻¹(x) = 1/(3x − 4)"], answer: 2 },
+        { q: "Solve the simultaneous equations: 2x + y = 7 and x − y = −1. Find x.", options: ["−2", "3", "2", "1"], answer: 2 },
+        { q: "If log₁₀ 2 = 0.3010 and log₁₀ 3 = 0.4771, find log₁₀ 6.", options: ["0.7781", "0.2459", "0.1761", "1.4310"], answer: 0 },
+        { q: "The volume of a cone of base radius 7 cm and height 12 cm (π = 22/7) is:", options: ["528 cm³", "1,848 cm³", "616 cm³", "154 cm³"], answer: 2 },
+        { q: "The total surface area of a closed cylinder of radius 7 cm and height 10 cm (π = 22/7) is:", options: ["880 cm²", "748 cm²", "528 cm²", "440 cm²"], answer: 1 },
+        { q: "A boat travels 8 km on a bearing of 090° then 6 km on a bearing of 180°. Its distance from the start is:", options: ["14 km", "10 km", "2 km", "48 km"], answer: 1 },
+        { q: "The nth term of the sequence 3, 7, 11, 15, ... is:", options: ["n + 4", "3n + 4", "4n + 1", "4n − 1"], answer: 3 }
+      ],
+      "English Language": [
+        { q: "Choose the option that best completes the sentence: Hardly had he arrived ___ the meeting began.", options: ["when", "while", "then", "than"], answer: 0 },
+        { q: "Choose the option that best completes the sentence: Had I known, I ___ come earlier.", options: ["would have", "will have", "had", "would"], answer: 0 },
+        { q: "Choose the option that best completes the sentence: The committee ___ divided in their opinions.", options: ["was being", "has been", "are", "is"], answer: 2 },
+        { q: "Choose the option that best completes the sentence: She prefers tea ___ coffee.", options: ["over", "from", "than", "to"], answer: 3 },
+        { q: "Choose the option that best completes the sentence: He is capable ___ doing the job well.", options: ["for", "at", "of", "to"], answer: 2 },
+        { q: "Choose the option that best completes the sentence: Scarcely had the teacher left ___ the pupils began to make noise.", options: ["after", "before", "when", "than"], answer: 2 },
+        { q: "Choose the option that best completes the sentence: The man, together with his sons, ___ arrived.", options: ["were", "have", "has", "are"], answer: 2 },
+        { q: "Choose the word nearest in meaning to 'ephemeral'.", options: ["short-lived", "dangerous", "permanent", "beautiful"], answer: 0 },
+        { q: "Choose the word nearest in meaning to 'obsolete'.", options: ["expensive", "outdated", "useful", "modern"], answer: 1 },
+        { q: "Choose the word nearest in meaning to 'ostentatious'.", options: ["secret", "timid", "showy", "modest"], answer: 2 },
+        { q: "Choose the word opposite in meaning to 'frugal'.", options: ["modest", "wasteful", "careful", "thrifty"], answer: 1 },
+        { q: "Choose the word opposite in meaning to 'candid'.", options: ["open", "honest", "frank", "deceitful"], answer: 3 },
+        { q: "Choose the word opposite in meaning to 'amiable'.", options: ["cheerful", "friendly", "hostile", "pleasant"], answer: 2 },
+        { q: "The expression 'to throw in the towel' means:", options: ["to start a fight", "to give up", "to clean up", "to win a race"], answer: 1 },
+        { q: "The expression 'a white elephant' means:", options: ["a costly but useless possession", "a rare animal", "a large gift", "a sign of luck"], answer: 0 },
+        { q: "The expression 'to call a spade a spade' means:", options: ["to dig deeply", "to be rude", "to tell a lie", "to speak plainly and frankly"], answer: 3 },
+        { q: "The expression 'the last straw' means:", options: ["the final problem that makes a situation unbearable", "the best solution", "a small gift", "the cheapest option"], answer: 0 },
+        { q: "The figure of speech in 'Death, be not proud' is:", options: ["Simile", "Apostrophe", "Euphemism", "Irony"], answer: 1 },
+        { q: "'He passed away peacefully' is an example of:", options: ["Oxymoron", "Hyperbole", "Irony", "Euphemism"], answer: 3 },
+        { q: "'The pen is mightier than the sword' is an example of:", options: ["Litotes", "Metonymy", "Simile", "Onomatopoeia"], answer: 1 },
+        { q: "'He is not a bad singer' (meaning he sings well) is an example of:", options: ["Pun", "Hyperbole", "Metaphor", "Litotes"], answer: 3 },
+        { q: "The repetition of the same consonant sound at the beginning of words is called:", options: ["Rhyme", "Alliteration", "Onomatopoeia", "Assonance"], answer: 1 },
+        { q: "The repetition of vowel sounds in nearby words is:", options: ["Assonance", "Alliteration", "Refrain", "Consonance"], answer: 0 },
+        { q: "A fourteen-line poem is called a:", options: ["Ode", "Elegy", "Ballad", "Sonnet"], answer: 3 },
+        { q: "A poem written to mourn the dead is an:", options: ["Ode", "Elegy", "Epic", "Lyric"], answer: 1 },
+        { q: "A long narrative poem about heroic deeds is an:", options: ["Epic", "Elegy", "Sonnet", "Haiku"], answer: 0 },
+        { q: "The turning point of a play when the action reaches its peak is the:", options: ["Exposition", "Denouement", "Climax", "Prologue"], answer: 2 },
+        { q: "The final resolution of a plot is called the:", options: ["Climax", "Exposition", "Rising action", "Denouement"], answer: 3 },
+        { q: "A speech in a play in which a character speaks his thoughts alone is a:", options: ["Aside", "Monologue to others", "Dialogue", "Soliloquy"], answer: 3 },
+        { q: "A story in which characters and events represent deeper moral meanings is an:", options: ["Allegory", "Epic", "Satire", "Farce"], answer: 0 },
+        { q: "A literary work that uses humour to expose and criticise human folly is a:", options: ["Elegy", "Tragedy", "Satire", "Romance"], answer: 2 },
+        { q: "The point of view in which the narrator uses 'I' is the:", options: ["First-person point of view", "Second-person", "Third-person omniscient", "Objective"], answer: 0 },
+        { q: "A comparison using 'like' or 'as' is a:", options: ["Idiom", "Simile", "Analogy only", "Metaphor"], answer: 1 },
+        { q: "In a formal letter, the correct ending to 'Dear Sir' is:", options: ["Your friend", "Best wishes", "Yours sincerely", "Yours faithfully"], answer: 3 },
+        { q: "A report is best described as:", options: ["A poem", "A formal account of an event or investigation", "A letter to a friend", "A story"], answer: 1 },
+        { q: "In an argumentative essay, the writer's main aim is to:", options: ["Persuade the reader to accept a point of view", "Describe a scene", "Tell a story", "List facts only"], answer: 0 },
+        { q: "The part of an essay that states the main idea at the beginning is the:", options: ["Introduction", "Body", "Title only", "Conclusion"], answer: 0 },
+        { q: "A summary should be written in:", options: ["The writer's own words and in a concise form", "Long detailed form", "The same words as the passage", "Poetry"], answer: 0 },
+        { q: "The main stress in the word 'photograph' falls on the:", options: ["Third syllable", "Second syllable", "None", "First syllable"], answer: 3 },
+        { q: "The word 'computer' is stressed on the:", options: ["Second syllable", "Third syllable", "Last syllable only", "First syllable"], answer: 0 },
+        { q: "Which of the following words has the vowel /iː/ as in 'seat'?", options: ["Bit", "Sit", "Sheep", "Ship"], answer: 2 },
+        { q: "Which of the following has the same vowel sound as 'boat'?", options: ["Boot", "Not", "Bought", "Note"], answer: 3 },
+        { q: "The word 'although' is a:", options: ["Subordinating conjunction", "Preposition", "Adverb", "Pronoun"], answer: 0 },
+        { q: "In the sentence 'Having finished his work, he left', the underlined phrase is a:", options: ["Adverb clause", "Noun clause", "Relative clause", "Participial phrase"], answer: 3 },
+        { q: "The sentence 'What he said surprised me' contains a:", options: ["Noun clause", "Main clause only", "Adverbial clause", "Adjectival clause"], answer: 0 },
+        { q: "The part of speech of the word 'quickly' in 'He ran quickly' is:", options: ["Adjective", "Adverb", "Verb", "Preposition"], answer: 1 },
+        { q: "The sentence 'The boy whose bag was stolen cried' contains a:", options: ["Noun clause", "Conditional clause", "Relative clause", "Adverbial clause"], answer: 2 },
+        { q: "The sentence 'If you study hard, you will pass' is a:", options: ["Conditional sentence", "Command sentence", "Exclamatory sentence", "Question sentence"], answer: 0 },
+        { q: "Which of these is a 'dangling modifier' error?", options: ["We saw the rain.", "Walking to school, the rain started falling.", "The rain fell while we walked.", "Walking to school, I saw an accident."], answer: 1 },
+        { q: "Choose the correct spelling.", options: ["occurrence", "occurrance", "ocurrence", "occurence"], answer: 0 }
+      ],
+      "Physics": [
+        { q: "A car accelerates uniformly from rest to 20 m/s in 8 s. Its acceleration is:", options: ["160 m/s²", "0.4 m/s²", "2.5 m/s²", "12 m/s²"], answer: 2 },
+        { q: "A body is thrown vertically upward with a velocity of 30 m/s. The time it takes to reach maximum height is (g = 10 m/s²):", options: ["3 s", "30 s", "6 s", "0.3 s"], answer: 0 },
+        { q: "A stone dropped from a height of 80 m takes how long to reach the ground (g = 10 m/s²)?", options: ["4 s", "8 s", "16 s", "2 s"], answer: 0 },
+        { q: "A force of 20 N acts on a mass of 4 kg. The acceleration produced is:", options: ["5 m/s²", "16 m/s²", "0.2 m/s²", "80 m/s²"], answer: 0 },
+        { q: "The momentum of a 5 kg body moving at 6 m/s is:", options: ["11 kg m/s", "180 kg m/s", "30 kg m/s", "1.2 kg m/s"], answer: 2 },
+        { q: "A 2 kg ball moving at 5 m/s collides and sticks to a stationary 3 kg ball. Their common velocity is:", options: ["1.5 m/s", "3 m/s", "2 m/s", "5 m/s"], answer: 2 },
+        { q: "Work done in lifting a 10 kg mass through 5 m (g = 10 m/s²) is:", options: ["50 J", "2 J", "500 J", "15 J"], answer: 2 },
+        { q: "The kinetic energy of a 4 kg body moving at 3 m/s is:", options: ["6 J", "36 J", "12 J", "18 J"], answer: 3 },
+        { q: "A machine of 80% efficiency does 400 J of useful work. The work input is:", options: ["320 J", "480 J", "500 J", "3,200 J"], answer: 2 },
+        { q: "A force of 100 N acts on an area of 0.5 m². The pressure is:", options: ["100.5 Pa", "20 Pa", "200 Pa", "50 Pa"], answer: 2 },
+        { q: "The pressure at a depth of 5 m in water of density 1000 kg/m³ (g = 10 m/s²) is:", options: ["50,000 Pa", "500 Pa", "200 Pa", "5,000 Pa"], answer: 0 },
+        { q: "The principle of flotation states that a floating body displaces:", options: ["Its volume of air", "Nothing", "Twice its weight of fluid", "Its own weight of fluid"], answer: 3 },
+        { q: "The specific heat capacity of a substance is the heat required to:", options: ["Raise the temperature of 1 kg by 1 K", "Vaporise 1 kg", "Raise 1 m³ by 1 K", "Melt 1 kg"], answer: 0 },
+        { q: "Heat required to raise the temperature of 2 kg of water from 20 °C to 70 °C (c = 4,200 J/kg K) is:", options: ["210,000 J", "8,400 J", "42,000 J", "420,000 J"], answer: 3 },
+        { q: "The heat required to melt 0.5 kg of ice at 0 °C (latent heat of fusion = 3.4 × 10⁵ J/kg) is:", options: ["680,000 J", "170,000 J", "340,000 J", "17,000 J"], answer: 1 },
+        { q: "A gas at 300 K and 2 atm has its pressure doubled at constant volume. Its new temperature is:", options: ["600 K", "900 K", "300 K", "150 K"], answer: 0 },
+        { q: "According to Boyle's law, at constant temperature the pressure of a gas is:", options: ["Directly proportional to its volume", "Proportional to its mass only", "Independent of its volume", "Inversely proportional to its volume"], answer: 3 },
+        { q: "The temperature of 27 °C in Kelvin is:", options: ["273 K", "327 K", "246 K", "300 K"], answer: 3 },
+        { q: "Heat transfer in a vacuum takes place by:", options: ["Convection", "Evaporation", "Radiation", "Conduction"], answer: 2 },
+        { q: "The linear expansivity of a metal rod of length 2 m increasing by 0.0024 m for a 100 K rise is:", options: ["1.2 × 10⁻⁵ K⁻¹", "2.4 × 10⁻⁵ K⁻¹", "1.2 × 10⁻³ K⁻¹", "1.2 × 10⁻⁷ K⁻¹"], answer: 0 },
+        { q: "A wave has frequency 50 Hz and wavelength 6 m. Its speed is:", options: ["56 m/s", "300 m/s", "0.12 m/s", "8.3 m/s"], answer: 1 },
+        { q: "The period of a wave of frequency 25 Hz is:", options: ["0.04 s", "4 s", "25 s", "0.4 s"], answer: 0 },
+        { q: "Sound waves are:", options: ["Transverse waves", "Electromagnetic waves", "Surface waves only", "Longitudinal waves"], answer: 3 },
+        { q: "Which of the following is an electromagnetic wave?", options: ["Water wave", "X-ray", "Ultrasound", "Sound"], answer: 1 },
+        { q: "The phenomenon responsible for echoes is:", options: ["Reflection of sound", "Diffraction of sound", "Absorption of sound", "Refraction of sound"], answer: 0 },
+        { q: "A converging lens has a focal length of 20 cm. The power of the lens is:", options: ["0.05 dioptres", "0.2 dioptres", "5 dioptres", "20 dioptres"], answer: 2 },
+        { q: "An object is placed 30 cm from a convex lens of focal length 10 cm. The image distance is:", options: ["30 cm", "7.5 cm", "20 cm", "15 cm"], answer: 3 },
+        { q: "The refractive index of a medium in which light travels at 2 × 10⁸ m/s (c = 3 × 10⁸ m/s) is:", options: ["1.5", "0.67", "6.0", "1.0"], answer: 0 },
+        { q: "Total internal reflection occurs when light travels from:", options: ["Any medium at 0° incidence", "Air to glass always", "A denser to a less dense medium at an angle greater than the critical angle", "A less dense to a denser medium"], answer: 2 },
+        { q: "A concave mirror forms a magnified, upright, virtual image when the object is placed:", options: ["Between the pole and the focus", "Beyond the centre of curvature", "At the focus", "At the centre of curvature"], answer: 0 },
+        { q: "A current of 3 A flows through a resistor of 8 Ω. The potential difference across it is:", options: ["2.67 V", "11 V", "24 V", "0.375 V"], answer: 2 },
+        { q: "Two resistors of 6 Ω and 3 Ω are connected in parallel. Their effective resistance is:", options: ["4.5 Ω", "9 Ω", "2 Ω", "18 Ω"], answer: 2 },
+        { q: "The power dissipated by a 40 Ω resistor carrying 0.5 A is:", options: ["5 W", "80 W", "10 W", "20 W"], answer: 2 },
+        { q: "An electric kettle rated 2 kW is used for 3 hours. The energy consumed in kWh is:", options: ["0.67 kWh", "6 kWh", "2 kWh", "5 kWh"], answer: 1 },
+        { q: "A cell of e.m.f. 12 V and internal resistance 1 Ω supplies a current to a 5 Ω resistor. The current is:", options: ["6 A", "2.4 A", "12 A", "2 A"], answer: 3 },
+        { q: "The capacitance of a capacitor that stores 600 μC at 12 V is:", options: ["612 μF", "50 μF", "7,200 μF", "0.02 μF"], answer: 1 },
+        { q: "The force on a charge in a magnetic field is greatest when the charge moves:", options: ["At 45° to the field", "Parallel to the field", "At 90° to the field", "Opposite to the field"], answer: 2 },
+        { q: "A transformer has 200 primary turns and 50 secondary turns. If the primary voltage is 240 V, the secondary voltage is:", options: ["960 V", "12 V", "190 V", "60 V"], answer: 3 },
+        { q: "A step-down transformer is used to:", options: ["Store energy", "Reduce voltage and increase current", "Increase voltage", "Convert AC to DC"], answer: 1 },
+        { q: "The rectification of alternating current is done with a:", options: ["Diode", "Resistor", "Capacitor only", "Inductor only"], answer: 0 },
+        { q: "Which of these particles has no charge?", options: ["Electron", "Alpha particle", "Proton", "Neutron"], answer: 3 },
+        { q: "The half-life of a radioactive sample is 8 days. The fraction remaining after 24 days is:", options: ["1/3", "1/8", "1/6", "1/4"], answer: 1 },
+        { q: "The emission of an alpha particle reduces the mass number of the nucleus by:", options: ["2", "4", "1", "0"], answer: 1 },
+        { q: "Beta particles are:", options: ["Fast-moving electrons", "Neutrons", "Photons", "Helium nuclei"], answer: 0 },
+        { q: "The photoelectric effect supports the:", options: ["Speed of light", "Reflection of light", "Particle nature of light", "Wave nature of light"], answer: 2 },
+        { q: "The energy of a photon is given by:", options: ["E = hf", "E = mc", "E = h/f", "E = f/h"], answer: 0 },
+        { q: "A satellite in a circular orbit around the Earth is kept in orbit by:", options: ["Air resistance", "Its own engine only", "Magnetic force", "Gravitational force acting as a centripetal force"], answer: 3 },
+        { q: "The weight of a 60 kg man on the Moon, where g = 1.6 m/s², is:", options: ["96 N", "37.5 N", "60 N", "600 N"], answer: 0 },
+        { q: "The turning effect of a force about a point is called:", options: ["Power", "Pressure", "Moment (torque)", "Impulse"], answer: 2 },
+        { q: "A uniform metre rule is balanced at the 50 cm mark. A 2 N weight is hung at 20 cm. A 3 N weight must be hung at what mark to balance?", options: ["80 cm", "60 cm", "30 cm", "70 cm"], answer: 3 }
+      ],
+      "Chemistry": [
+        { q: "The number of moles in 11 g of carbon dioxide (C = 12, O = 16) is:", options: ["2.5 mol", "0.5 mol", "4 mol", "0.25 mol"], answer: 3 },
+        { q: "The mass of 0.5 mole of sodium hydroxide, NaOH (Na = 23, O = 16, H = 1), is:", options: ["40 g", "10 g", "20 g", "80 g"], answer: 2 },
+        { q: "The number of molecules in 2 moles of a gas is (Avogadro's number = 6 × 10²³):", options: ["1.2 × 10²⁴", "1.2 × 10²³", "3 × 10²³", "6 × 10²³"], answer: 0 },
+        { q: "The volume occupied by 2 moles of a gas at s.t.p. is:", options: ["11.2 dm³", "44.8 dm³", "22.4 dm³", "67.2 dm³"], answer: 1 },
+        { q: "The empirical formula of a compound containing 40% carbon, 6.7% hydrogen and 53.3% oxygen is (C = 12, H = 1, O = 16):", options: ["CHO", "CH₂O", "C₂H₂O", "C₂H₄O₂"], answer: 1 },
+        { q: "In the reaction N₂ + 3H₂ → 2NH₃, the volume of ammonia produced from 10 dm³ of nitrogen is:", options: ["30 dm³", "20 dm³", "10 dm³", "5 dm³"], answer: 1 },
+        { q: "The number of electrons in the outermost shell of an element in Group 17 is:", options: ["7", "5", "1", "8"], answer: 0 },
+        { q: "The electronic configuration of chlorine (atomic number 17) is:", options: ["2, 8, 6", "2, 8, 8, 1", "2, 7, 8", "2, 8, 7"], answer: 3 },
+        { q: "An element X has electronic configuration 2, 8, 2. It is in:", options: ["Group 2, Period 2", "Group 12, Period 3", "Group 2, Period 3", "Group 3, Period 2"], answer: 2 },
+        { q: "The type of bonding in sodium chloride is:", options: ["Metallic bonding", "Ionic bonding", "Covalent bonding", "Hydrogen bonding"], answer: 1 },
+        { q: "The type of bond that exists in a molecule of oxygen, O₂, is:", options: ["Ionic bond", "Triple covalent bond", "Double covalent bond", "Single covalent bond"], answer: 2 },
+        { q: "Which of the following compounds has a dative (coordinate) covalent bond?", options: ["Sodium chloride", "Ammonium ion, NH₄⁺", "Water, H₂O", "Methane, CH₄"], answer: 1 },
+        { q: "The shape of a methane molecule is:", options: ["Pyramidal", "Linear", "Trigonal planar", "Tetrahedral"], answer: 3 },
+        { q: "The intermolecular force responsible for the high boiling point of water is:", options: ["Ionic bonding", "Van der Waals forces", "Hydrogen bonding", "Metallic bonding"], answer: 2 },
+        { q: "The pH of a 0.001 M HCl solution is:", options: ["3", "0.001", "11", "1"], answer: 0 },
+        { q: "An aqueous solution with a pH of 10 is:", options: ["Neutral", "Acidic", "Strongly acidic", "Alkaline"], answer: 3 },
+        { q: "The indicator that turns pink in an alkaline medium is:", options: ["Phenolphthalein", "Litmus red", "Universal indicator green", "Methyl orange"], answer: 0 },
+        { q: "25 cm³ of 0.1 M HCl neutralises 20 cm³ of NaOH. The concentration of the NaOH is:", options: ["0.125 M", "0.2 M", "0.08 M", "0.5 M"], answer: 0 },
+        { q: "A salt formed by the complete replacement of the hydrogen ions of an acid is a:", options: ["Acid salt", "Normal salt", "Basic salt", "Double salt"], answer: 1 },
+        { q: "Which of the following gases is produced when zinc reacts with dilute hydrochloric acid?", options: ["Carbon dioxide", "Oxygen", "Hydrogen", "Chlorine"], answer: 2 },
+        { q: "The oxidation state of manganese in KMnO₄ is:", options: ["+7", "+2", "+6", "+4"], answer: 0 },
+        { q: "In the reaction Zn + Cu²⁺ → Zn²⁺ + Cu, the reducing agent is:", options: ["Zn²⁺", "Cu²⁺", "Cu", "Zn"], answer: 3 },
+        { q: "During electrolysis of dilute sulphuric acid using platinum electrodes, the gas liberated at the cathode is:", options: ["Hydrogen sulphide", "Oxygen", "Sulphur dioxide", "Hydrogen"], answer: 3 },
+        { q: "The quantity of electricity in coulombs when 2 A flows for 10 minutes is:", options: ["12,000 C", "1,200 C", "120 C", "20 C"], answer: 1 },
+        { q: "In the electrolysis of molten sodium chloride, the product at the anode is:", options: ["Hydrogen", "Chlorine", "Oxygen", "Sodium"], answer: 1 },
+        { q: "An effective method for protecting iron from rusting is:", options: ["Painting with water", "Galvanising with zinc", "Soaking it in acid", "Exposing it to air"], answer: 1 },
+        { q: "The reaction rate generally increases when:", options: ["The surface area is reduced", "The catalyst is removed", "The temperature of the reactants is increased", "The concentration is decreased"], answer: 2 },
+        { q: "According to Le Chatelier's principle, increasing the pressure on the equilibrium N₂ + 3H₂ ⇌ 2NH₃ will:", options: ["Shift it to the left", "Have no effect", "Shift the equilibrium to the right", "Stop the reaction"], answer: 2 },
+        { q: "A reaction that releases heat to the surroundings is:", options: ["Exothermic", "Endothermic", "Adiabatic", "Isothermal"], answer: 0 },
+        { q: "Which of these is an endothermic process?", options: ["Burning of wood", "Condensation of steam", "Neutralisation of an acid by a base", "Melting of ice"], answer: 3 },
+        { q: "The IUPAC name of CH₃CH₂CH₃ is:", options: ["Propene", "Ethane", "Propane", "Butane"], answer: 2 },
+        { q: "The IUPAC name of CH₃CH=CH₂ is:", options: ["Propane", "Propyne", "Propene", "Butene"], answer: 2 },
+        { q: "The functional group of alkanols (alcohols) is:", options: ["–COOH", "–NH₂", "–CHO", "–OH"], answer: 3 },
+        { q: "The reaction between an alkanol and an alkanoic acid to form an ester is called:", options: ["Esterification", "Saponification", "Hydrolysis", "Polymerisation"], answer: 0 },
+        { q: "The hydrolysis of an ester with sodium hydroxide to produce soap is called:", options: ["Esterification", "Saponification", "Fermentation", "Cracking"], answer: 1 },
+        { q: "Ethene reacts with bromine water to give a colourless product because of:", options: ["Combustion", "Substitution reaction", "Addition reaction", "Elimination reaction"], answer: 2 },
+        { q: "The process of breaking large hydrocarbon molecules into smaller ones is:", options: ["Cracking", "Reforming only", "Polymerisation", "Distillation only"], answer: 0 },
+        { q: "The monomer of polythene is:", options: ["Ethyne", "Ethene", "Vinyl chloride", "Propene"], answer: 1 },
+        { q: "The fractional distillation of crude oil separates its components according to their:", options: ["Solubilities", "Colours", "Densities only", "Boiling points"], answer: 3 },
+        { q: "Which of these is the main constituent of natural gas?", options: ["Butane", "Methane", "Propane", "Ethane"], answer: 1 },
+        { q: "The process by which sugar is converted to ethanol by yeast is:", options: ["Esterification", "Fermentation", "Hydrolysis", "Cracking"], answer: 1 },
+        { q: "Which of the following ions causes permanent hardness of water?", options: ["K⁺ ions", "Cl⁻ ions only", "Ca²⁺ ions with sulphate", "Na⁺ ions"], answer: 2 },
+        { q: "Temporary hardness of water can be removed by:", options: ["Boiling", "Filtration", "Cooling", "Adding salt"], answer: 0 },
+        { q: "The gas that turns lime water milky is:", options: ["Oxygen", "Nitrogen", "Carbon dioxide", "Hydrogen"], answer: 2 },
+        { q: "The catalyst used in the Haber process is:", options: ["Platinum", "Vanadium(V) oxide", "Iron", "Nickel"], answer: 2 },
+        { q: "The catalyst used in the contact process for sulphuric acid is:", options: ["Manganese(IV) oxide", "Nickel", "Vanadium(V) oxide", "Iron"], answer: 2 },
+        { q: "An element that is a liquid at room temperature is:", options: ["Zinc", "Iron", "Mercury", "Sodium"], answer: 2 },
+        { q: "The most abundant gas in the atmosphere is:", options: ["Argon", "Nitrogen", "Carbon dioxide", "Oxygen"], answer: 1 },
+        { q: "Which of the following metals is extracted by electrolysis of its molten ore?", options: ["Iron", "Copper", "Aluminium", "Zinc"], answer: 2 },
+        { q: "The ore from which iron is mainly extracted is:", options: ["Cassiterite", "Haematite", "Galena", "Bauxite"], answer: 1 }
+      ],
+      "Biology": [
+        { q: "Which organelle is the site of protein synthesis?", options: ["Golgi apparatus", "Lysosome", "Mitochondrion", "Ribosome"], answer: 3 },
+        { q: "Which organelle packages and modifies proteins for secretion?", options: ["Chloroplast", "Golgi apparatus", "Nucleus", "Ribosome"], answer: 1 },
+        { q: "The sub-stage of cell division in which chromosomes line up at the equator is:", options: ["Anaphase", "Telophase", "Metaphase", "Prophase"], answer: 2 },
+        { q: "Meiosis results in cells that are:", options: ["Haploid and identical", "Diploid and different", "Diploid and identical", "Haploid and genetically different"], answer: 3 },
+        { q: "Mitosis is important for:", options: ["Growth and repair", "Gamete formation", "Mutation", "Fertilisation"], answer: 0 },
+        { q: "The movement of water from a region of high water potential to low water potential through a semi-permeable membrane is:", options: ["Active transport", "Diffusion", "Osmosis", "Facilitated diffusion"], answer: 2 },
+        { q: "The uptake of mineral ions by root hairs against a concentration gradient is by:", options: ["Transpiration", "Diffusion", "Osmosis", "Active transport"], answer: 3 },
+        { q: "The enzyme that digests proteins in the stomach is:", options: ["Trypsin", "Lipase", "Pepsin", "Amylase"], answer: 2 },
+        { q: "The pH at which pepsin works best is:", options: ["Acidic (about pH 2)", "Strongly alkaline (pH 12)", "Alkaline (about pH 9)", "Neutral (pH 7)"], answer: 0 },
+        { q: "The end products of fat digestion are:", options: ["Fatty acids and glycerol", "Glucose", "Maltose", "Amino acids"], answer: 0 },
+        { q: "The tissue that transports water in plants is the:", options: ["Xylem", "Phloem", "Epidermis", "Cambium"], answer: 0 },
+        { q: "The tissue that transports manufactured food in plants is the:", options: ["Phloem", "Pith", "Xylem", "Cortex"], answer: 0 },
+        { q: "Loss of water vapour from the leaves of a plant is:", options: ["Respiration", "Guttation", "Translocation", "Transpiration"], answer: 3 },
+        { q: "The light-dependent stage of photosynthesis takes place in the:", options: ["Nucleus", "Mitochondria", "Stroma", "Grana of chloroplasts"], answer: 3 },
+        { q: "The products of the light stage of photosynthesis include:", options: ["Starch", "ATP, NADPH and oxygen", "Carbon dioxide", "Glucose only"], answer: 1 },
+        { q: "Anaerobic respiration in yeast produces:", options: ["Ethanol and carbon dioxide", "Oxygen", "Lactic acid", "Water only"], answer: 0 },
+        { q: "Anaerobic respiration in muscle cells produces:", options: ["Carbon dioxide only", "Glucose", "Ethanol", "Lactic acid"], answer: 3 },
+        { q: "The number of ATP molecules gained from the complete aerobic respiration of one glucose molecule is about:", options: ["4", "10", "36 to 38", "2"], answer: 2 },
+        { q: "The part of the heart that receives deoxygenated blood from the body is the:", options: ["Left atrium", "Right atrium", "Right ventricle", "Left ventricle"], answer: 1 },
+        { q: "The blood vessel that carries oxygenated blood from the lungs to the heart is the:", options: ["Aorta", "Pulmonary artery", "Pulmonary vein", "Vena cava"], answer: 2 },
+        { q: "The ABO blood group of a person with both A and B antigens is:", options: ["B", "O", "AB", "A"], answer: 2 },
+        { q: "The universal blood donor is group:", options: ["O", "A", "AB", "B"], answer: 0 },
+        { q: "The functional unit of the kidney is the:", options: ["Neuron", "Alveolus", "Nephron", "Villus"], answer: 2 },
+        { q: "The hormone that controls the water content of blood by acting on the kidney is:", options: ["Insulin", "ADH", "Adrenaline", "Thyroxine"], answer: 1 },
+        { q: "The hormone produced by the pancreas that lowers blood sugar is:", options: ["Cortisol", "Adrenaline", "Insulin", "Glucagon"], answer: 2 },
+        { q: "The part of the brain that controls balance and coordination is the:", options: ["Medulla oblongata", "Hypothalamus", "Cerebellum", "Cerebrum"], answer: 2 },
+        { q: "The reflex action pathway is: receptor → sensory neurone → relay neurone → motor neurone →", options: ["Brain", "Receptor", "Hormone", "Effector"], answer: 3 },
+        { q: "The structure that regulates the amount of light entering the eye is the:", options: ["Lens", "Cornea", "Iris", "Retina"], answer: 2 },
+        { q: "Rod cells in the retina are responsible for:", options: ["Focusing light", "Colour vision", "Vision in dim light", "Producing tears"], answer: 2 },
+        { q: "In humans, the sex chromosomes of a female are:", options: ["XX", "YY", "XO", "XY"], answer: 0 },
+        { q: "A cross between a homozygous tall plant (TT) and a homozygous dwarf plant (tt) gives an F₁ generation that is:", options: ["Half tall and half dwarf", "All dwarf", "All tall (Tt)", "Tall and dwarf in a 3:1 ratio"], answer: 2 },
+        { q: "The expected phenotypic ratio of the F₂ generation in a monohybrid cross is:", options: ["1 : 1", "3 : 1", "9 : 3 : 3 : 1", "1 : 2 : 1"], answer: 1 },
+        { q: "A heterozygous individual is one who has:", options: ["Two identical alleles", "Two different alleles for a gene", "No allele", "Only one allele"], answer: 1 },
+        { q: "A cross between Aa and aa individuals gives offspring in the ratio:", options: ["All Aa", "3 Aa : 1 aa", "All aa", "1 Aa : 1 aa"], answer: 3 },
+        { q: "Sickle cell anaemia is caused by:", options: ["A gene mutation", "A bacterial infection", "A lack of iron", "A virus"], answer: 0 },
+        { q: "A person with the genotype HbAS is:", options: ["A carrier of the sickle cell trait", "Immune to malaria only", "Completely normal with no allele", "Sickle cell sufferer"], answer: 0 },
+        { q: "Natural selection was proposed by:", options: ["Louis Pasteur", "Gregor Mendel", "Jean-Baptiste Lamarck", "Charles Darwin"], answer: 3 },
+        { q: "The inheritance of acquired characteristics was proposed by:", options: ["Darwin", "Wallace", "Lamarck", "Mendel"], answer: 2 },
+        { q: "Structures with the same origin but different functions are called:", options: ["Analogous structures", "Vestigial structures", "Embryonic structures", "Homologous structures"], answer: 3 },
+        { q: "The wings of a bird and the wings of an insect are:", options: ["Vestigial structures", "Homologous structures", "Analogous structures", "Identical structures"], answer: 2 },
+        { q: "An organism's role in its community is called its:", options: ["Population", "Biome", "Niche", "Habitat"], answer: 2 },
+        { q: "The relationship in which one organism benefits and the other is harmed is:", options: ["Parasitism", "Mutualism", "Commensalism", "Saprophytism"], answer: 0 },
+        { q: "The nitrogen-fixing bacteria found in root nodules of legumes are:", options: ["Rhizobium", "Pseudomonas", "Nitrobacter", "Nitrosomonas"], answer: 0 },
+        { q: "The conversion of ammonia to nitrates in the soil is called:", options: ["Denitrification", "Nitrogen fixation", "Ammonification", "Nitrification"], answer: 3 },
+        { q: "The correct sequence of an energy pyramid is that energy:", options: ["Remains constant", "Increases at each higher trophic level", "Is created at each level", "Decreases at each higher trophic level"], answer: 3 },
+        { q: "The main cause of the greenhouse effect is the accumulation of:", options: ["Nitrogen", "Argon", "Oxygen", "Carbon dioxide and methane"], answer: 3 },
+        { q: "A population of organisms of the same species in a given area is a:", options: ["Biome", "Community", "Ecosystem", "Population"], answer: 3 },
+        { q: "The vector of sleeping sickness is the:", options: ["Housefly", "Anopheles mosquito", "Tick", "Tsetse fly"], answer: 3 },
+        { q: "The causative organism of malaria is:", options: ["Plasmodium", "Trypanosoma", "Entamoeba", "Vibrio"], answer: 0 },
+        { q: "Which of the following is a function of the liver?", options: ["Secretion of pepsin", "Deamination of excess amino acids to form urea", "Production of insulin", "Production of red blood cells in adults"], answer: 1 }
+      ],
+      "Economics": [
+        { q: "The branch of economics concerned with the behaviour of individual consumers and firms is:", options: ["Welfare economics", "Microeconomics", "Macroeconomics", "Econometrics"], answer: 1 },
+        { q: "Scarcity in economics means:", options: ["Limited resources relative to unlimited wants", "Poverty", "Lack of money only", "Absence of goods"], answer: 0 },
+        { q: "The opportunity cost of a decision is:", options: ["The next best alternative forgone", "The money spent", "The time spent only", "The total cost"], answer: 0 },
+        { q: "A production possibility curve shows:", options: ["Consumer income", "Prices of goods", "Maximum combinations of two goods that can be produced with given resources", "Taxes on goods"], answer: 2 },
+        { q: "If the price of a good rises from ₦100 to ₦120 and quantity demanded falls from 50 to 40, the price elasticity of demand (using % change) is:", options: ["0.5", "1.5", "1.0", "2.0"], answer: 2 },
+        { q: "A good with a price elasticity of demand greater than 1 is said to be:", options: ["Unitary", "Perfectly inelastic", "Inelastic", "Elastic"], answer: 3 },
+        { q: "The demand for salt is most likely to be:", options: ["Perfectly elastic", "Unitary", "Elastic", "Inelastic"], answer: 3 },
+        { q: "A rightward shift in the demand curve is caused by:", options: ["A rise in the price of the good", "An increase in consumers' income (for a normal good)", "A fall in population", "A fall in the price of the good"], answer: 1 },
+        { q: "An increase in the cost of raw materials will cause the supply curve to:", options: ["Shift to the right", "Remain unchanged", "Become vertical", "Shift to the left"], answer: 3 },
+        { q: "At equilibrium price in a market:", options: ["Supply is zero", "Quantity demanded equals quantity supplied", "Price is zero", "Demand is zero"], answer: 1 },
+        { q: "If a price ceiling is set below the equilibrium price, the result is:", options: ["Equilibrium", "Excess demand (shortage)", "Perfect competition", "Excess supply (surplus)"], answer: 1 },
+        { q: "The market structure with a single seller and no close substitutes is:", options: ["Monopolistic competition", "Perfect competition", "Monopoly", "Oligopoly"], answer: 2 },
+        { q: "A market with a few large firms whose actions affect one another is:", options: ["Oligopoly", "Monopsony", "Monopoly", "Perfect competition"], answer: 0 },
+        { q: "Total revenue is calculated as:", options: ["Cost − Price", "Quantity ÷ Price", "Price × Quantity sold", "Price + Quantity"], answer: 2 },
+        { q: "A firm's profit is maximised where:", options: ["Average cost is highest", "Marginal revenue equals marginal cost", "Total revenue is lowest", "Marginal cost is zero"], answer: 1 },
+        { q: "Fixed costs are costs that:", options: ["Do not change with the level of output", "Are paid only monthly", "Are zero in the short run", "Vary with output"], answer: 0 },
+        { q: "If total cost is ₦5,000 for 100 units, the average cost is:", options: ["₦50", "₦5", "₦5,100", "₦500"], answer: 0 },
+        { q: "The law of diminishing returns states that as more of a variable factor is added to a fixed factor, the:", options: ["Costs fall forever", "Fixed costs rise", "Additional output eventually falls", "Output increases forever"], answer: 2 },
+        { q: "Economies of scale refer to:", options: ["Rising average costs", "Falling average costs as output expands", "Fixed production", "Price controls"], answer: 1 },
+        { q: "A tax whose burden falls on the same person who pays it is a/an:", options: ["Direct tax", "Excise tax", "Regressive tax only", "Indirect tax"], answer: 0 },
+        { q: "Value Added Tax (VAT) is an example of:", options: ["A capital tax", "A progressive tax", "A direct tax", "An indirect tax"], answer: 3 },
+        { q: "A tax system where the rate rises with income is:", options: ["Flat", "Regressive", "Proportional", "Progressive"], answer: 3 },
+        { q: "GDP is the:", options: ["Total savings", "Total value of goods and services produced within a country in a year", "Total government spending", "Total exports"], answer: 1 },
+        { q: "GNP differs from GDP by including:", options: ["Government spending", "Depreciation", "Imports", "Net income from abroad"], answer: 3 },
+        { q: "If GDP is ₦40 trillion and population is 200 million, per capita income is:", options: ["₦20,000", "₦200,000", "₦8,000", "₦2,000,000"], answer: 1 },
+        { q: "Inflation is defined as a:", options: ["Fall in prices", "Fall in output", "Rise in one price only", "Sustained rise in the general price level"], answer: 3 },
+        { q: "Inflation caused by an increase in production costs is:", options: ["Hyperinflation only", "Demand-pull inflation", "Cost-push inflation", "Deflation"], answer: 2 },
+        { q: "A fall in the general price level is called:", options: ["Deflation", "Inflation", "Reflation", "Stagflation"], answer: 0 },
+        { q: "Open market operations by the Central Bank involve:", options: ["Buying and selling government securities", "Collecting taxes", "Printing banknotes only", "Granting loans to farmers"], answer: 0 },
+        { q: "The bank that acts as banker to the government and other banks is the:", options: ["Central bank", "Microfinance bank", "Merchant bank", "Commercial bank"], answer: 0 },
+        { q: "The Cash Reserve Ratio is the:", options: ["Tax on banks", "Percentage of deposits commercial banks must keep with the central bank", "Maximum loan size", "Rate of interest on loans"], answer: 1 },
+        { q: "Which of the following is a function of money?", options: ["Production", "Consumption only", "Medium of exchange", "Barter"], answer: 2 },
+        { q: "The institution that regulates the capital market in Nigeria is the:", options: ["Securities and Exchange Commission", "Nigerian Customs Service", "INEC", "NAFDAC"], answer: 0 },
+        { q: "The term 'balance of payments' refers to:", options: ["Total exports only", "A record of a country's transactions with the rest of the world", "The national budget", "Total imports only"], answer: 1 },
+        { q: "If a country's exports are ₦500 billion and imports are ₦650 billion, the balance of trade is:", options: ["Surplus of ₦150 billion", "Deficit of ₦150 billion", "Balanced", "Deficit of ₦1,150 billion"], answer: 1 },
+        { q: "The theory of comparative advantage was proposed by:", options: ["Adam Smith", "J.M. Keynes", "Karl Marx", "David Ricardo"], answer: 3 },
+        { q: "A tax on imported goods is called:", options: ["Tariff", "Quota", "Excise duty", "Subsidy"], answer: 0 },
+        { q: "A limit on the quantity of a good that may be imported is a:", options: ["Subsidy", "Quota", "Tariff", "Embargo only"], answer: 1 },
+        { q: "Devaluation of a currency makes a country's exports:", options: ["Unchanged in price", "Cheaper for foreigners", "More expensive for foreigners", "Impossible to sell"], answer: 1 },
+        { q: "The International Monetary Fund (IMF) was set up mainly to:", options: ["Promote international monetary cooperation and stability", "Fix food prices", "Produce oil", "Control inflation in Nigeria only"], answer: 0 },
+        { q: "OPEC is an association of:", options: ["Rice importers", "Cocoa producers", "Petroleum-exporting countries", "Gold miners"], answer: 2 },
+        { q: "The measurement of the population's size, structure and growth is:", options: ["Sociology only", "Demography", "Statistics only", "Geography"], answer: 1 },
+        { q: "The optimum population is the population size that:", options: ["Has no old people", "Has the lowest birth rate", "Gives the highest output per head", "Is the largest possible"], answer: 2 },
+        { q: "The labour force of a country consists of:", options: ["Those who are willing and able to work", "Only civil servants", "All citizens", "Only the employed"], answer: 0 },
+        { q: "Unemployment caused by a lack of demand for goods in a recession is:", options: ["Structural unemployment", "Frictional unemployment", "Cyclical unemployment", "Seasonal unemployment"], answer: 2 },
+        { q: "Agriculture contributes to economic development by:", options: ["Reducing exports", "Reducing employment", "Increasing imports of food", "Providing food and raw materials"], answer: 3 },
+        { q: "A sole proprietorship is a business owned by:", options: ["Two or more shareholders", "One person", "A cooperative", "The government"], answer: 1 },
+        { q: "A limited liability company is owned by:", options: ["Trade unions", "Shareholders", "A single owner", "The government"], answer: 1 },
+        { q: "A public corporation is owned by the:", options: ["Shareholders", "A cooperative", "A single person", "Government"], answer: 3 },
+        { q: "The privatisation of a public enterprise means:", options: ["Transfer of ownership to private individuals", "Government takeover", "Closure of the enterprise", "Merger with a bank"], answer: 0 }
+      ],
+      "Government": [
+        { q: "Government is best defined as:", options: ["The head of state only", "The institution through which the state exercises authority", "A group of political parties", "A political ideology"], answer: 1 },
+        { q: "The legitimate right to exercise power is called:", options: ["Force", "Influence", "Authority", "Coercion"], answer: 2 },
+        { q: "The supreme and ultimate power of a state to make and enforce laws is:", options: ["Sovereignty", "Nationalism", "Legitimacy", "Citizenship"], answer: 0 },
+        { q: "A state is made up of the following EXCEPT:", options: ["Political parties", "Government", "Territory", "Population"], answer: 0 },
+        { q: "The separation of powers was propounded by:", options: ["Montesquieu", "Jean-Jacques Rousseau", "John Locke", "Plato"], answer: 0 },
+        { q: "The system by which each arm of government checks the others is:", options: ["Federalism", "Devolution", "Checks and balances", "Rule of law"], answer: 2 },
+        { q: "A constitution that can be amended only through a special, difficult procedure is:", options: ["Rigid", "Unitary", "Flexible", "Unwritten"], answer: 0 },
+        { q: "The Nigerian Constitution is described as:", options: ["Unwritten and flexible", "Written and rigid", "Unwritten and rigid", "Written and flexible"], answer: 1 },
+        { q: "The British constitution is mostly:", options: ["Written", "Unwritten", "Federal", "Rigid"], answer: 1 },
+        { q: "A system of government in which sovereignty is shared between central and regional governments is:", options: ["Monarchy", "Confederation", "Federalism", "Unitary system"], answer: 2 },
+        { q: "An example of a unitary state is:", options: ["Nigeria", "Ghana", "Canada", "United States"], answer: 1 },
+        { q: "The head of the executive in a presidential system is also:", options: ["A ceremonial figure", "The head of state and head of government", "Only the prime minister", "Only the head of state"], answer: 1 },
+        { q: "In a parliamentary system, the executive is responsible to the:", options: ["Judiciary", "Legislature", "Army", "Police"], answer: 1 },
+        { q: "The legislature in Nigeria at the federal level is called the:", options: ["Council of State", "Senate only", "Federal Executive Council", "National Assembly"], answer: 3 },
+        { q: "The number of senators in the Nigerian Senate is:", options: ["360", "469", "109", "108"], answer: 2 },
+        { q: "The number of members in the Nigerian House of Representatives is:", options: ["360", "469", "109", "774"], answer: 0 },
+        { q: "The Nigerian legislature is described as:", options: ["Unicameral", "Tricameral", "Monocameral", "Bicameral"], answer: 3 },
+        { q: "The highest court in Nigeria is the:", options: ["Supreme Court", "Customary Court", "Federal High Court", "Court of Appeal"], answer: 0 },
+        { q: "The head of the judiciary in Nigeria is the:", options: ["Senate President", "Attorney-General", "Chief Justice of Nigeria", "Speaker"], answer: 2 },
+        { q: "The power of the courts to declare an act of the legislature or executive unconstitutional is called:", options: ["Impeachment", "Judicial review", "Judicial activism only", "Veto"], answer: 1 },
+        { q: "The process of removing a public officer from office for misconduct is:", options: ["Referendum", "Impeachment", "Veto", "Recall of a court"], answer: 1 },
+        { q: "The right to vote in elections is called:", options: ["Candidacy", "Citizenship", "Sovereignty", "Franchise (suffrage)"], answer: 3 },
+        { q: "An electoral system in which the candidate with the highest number of votes wins in a constituency is:", options: ["Run-off system", "Proportional representation", "Alternative vote", "Simple majority (first-past-the-post)"], answer: 3 },
+        { q: "The body that conducts elections in Nigeria is:", options: ["INEC", "NASS", "ICPC", "EFCC"], answer: 0 },
+        { q: "A political party is best described as:", options: ["A military group", "An organised group seeking to win power through elections", "A group of pressure interests", "A trade union"], answer: 1 },
+        { q: "A one-party system exists in:", options: ["United Kingdom", "Nigeria", "Cuba", "India"], answer: 2 },
+        { q: "A group that tries to influence government policy without seeking to take over power is a:", options: ["Pressure group", "Political machine", "Cabinet", "Political party"], answer: 0 },
+        { q: "Which of these is a pressure group in Nigeria?", options: ["APC", "INEC", "PDP", "Nigeria Labour Congress"], answer: 3 },
+        { q: "The 1914 amalgamation of Nigeria was carried out by:", options: ["Lord Lugard", "Sir Arthur Richards", "Sir Hugh Clifford", "Sir John Macpherson"], answer: 0 },
+        { q: "The system of administration used by the British in Northern Nigeria was:", options: ["Indirect rule", "Assimilation", "Direct rule", "Association"], answer: 0 },
+        { q: "The French colonial policy of making Africans French citizens in culture was:", options: ["Association", "Apartheid", "Indirect rule", "Assimilation"], answer: 3 },
+        { q: "The Constitution that introduced the regional system and the federal principle in 1954 was the:", options: ["Independence Constitution", "Clifford Constitution", "Richards Constitution", "Lyttelton Constitution"], answer: 3 },
+        { q: "Nigeria became independent on:", options: ["1 October 1960", "12 June 1993", "15 January 1966", "1 October 1963"], answer: 0 },
+        { q: "The first military coup in Nigeria took place in:", options: ["January 1966", "July 1966", "1983", "1960"], answer: 0 },
+        { q: "The Nigerian Civil War ended in:", options: ["1970", "1975", "1967", "1966"], answer: 0 },
+        { q: "The creation of 12 states in Nigeria was done in 1967 under:", options: ["General Ibrahim Babangida", "General Yakubu Gowon", "General Murtala Mohammed", "General Olusegun Obasanjo"], answer: 1 },
+        { q: "The body that investigates corruption and financial crimes in Nigeria is the:", options: ["EFCC", "FRSC", "INEC", "NAFDAC"], answer: 0 },
+        { q: "Public opinion is important in a democracy because it:", options: ["Influences government decisions", "Replaces the constitution", "Removes elections", "Is binding on courts"], answer: 0 },
+        { q: "The principle that no one is above the law is the:", options: ["Separation of powers", "Federalism", "Sovereignty", "Rule of law"], answer: 3 },
+        { q: "The act of a government giving some of its powers to lower levels of government is:", options: ["Secession", "Revolution", "Devolution", "Annexation"], answer: 2 },
+        { q: "The United Nations Security Council has how many permanent members?", options: ["5", "10", "15", "7"], answer: 0 },
+        { q: "The headquarters of the African Union is in:", options: ["Addis Ababa", "Nairobi", "Abuja", "Lagos"], answer: 0 },
+        { q: "ECOWAS was established in:", options: ["1960", "1963", "1975", "1999"], answer: 2 },
+        { q: "The Commonwealth of Nations is made up mainly of:", options: ["Former French colonies", "Oil-producing countries", "Members of NATO", "Former British colonies"], answer: 3 },
+        { q: "The Non-Aligned Movement was formed to:", options: ["Support the USSR", "Join NATO", "Form a trade union", "Avoid taking sides in the Cold War"], answer: 3 },
+        { q: "The main organ of the United Nations in which all member states are represented is the:", options: ["General Assembly", "Security Council", "International Court of Justice", "Secretariat"], answer: 0 },
+        { q: "The Universal Declaration of Human Rights was adopted in:", options: ["1945", "1960", "1948", "1963"], answer: 2 },
+        { q: "The doctrine of 'ultra vires' means that an act is:", options: ["Valid by custom", "Within the legal power", "Approved by parliament", "Beyond the legal powers of the person or body"], answer: 3 },
+        { q: "Which of the following is NOT a feature of a democratic government?", options: ["Free press", "Rule of law", "Absence of periodic elections", "Competitive elections"], answer: 2 },
+        { q: "A government by a small group of rich or powerful people is:", options: ["Monarchy", "Republic", "Oligarchy", "Democracy"], answer: 2 }
+      ],
+      "Literature-in-English": [
+        { q: "The three main genres of literature are:", options: ["Poem, play and letter", "Tragedy, comedy and epic", "Prose, poetry and drama", "Fiction, novel and story"], answer: 2 },
+        { q: "A play in which the hero meets a downfall due to a tragic flaw is a:", options: ["Farce", "Melodrama", "Tragedy", "Comedy"], answer: 2 },
+        { q: "The tragic flaw of a hero is also called:", options: ["Catharsis", "Hamartia", "Hubris only", "Denouement"], answer: 1 },
+        { q: "The emotional release or purification felt by the audience at the end of a tragedy is:", options: ["Foil", "Climax", "Hamartia", "Catharsis"], answer: 3 },
+        { q: "A character who contrasts with another to bring out the other's qualities is a:", options: ["Chorus", "Protagonist", "Narrator", "Foil"], answer: 3 },
+        { q: "In classical drama, a group of performers who comment on the action is the:", options: ["Foil", "Prologue", "Cast", "Chorus"], answer: 3 },
+        { q: "An opening speech or section before the main action of a play is a/an:", options: ["Prologue", "Soliloquy", "Epilogue", "Aside"], answer: 0 },
+        { q: "The concluding section addressed to the audience at the end of a play is the:", options: ["Exposition", "Prologue", "Epilogue", "Climax"], answer: 2 },
+        { q: "A remark made by a character to the audience that other characters are supposed not to hear is an:", options: ["Aside", "Soliloquy", "Monologue", "Dialogue"], answer: 0 },
+        { q: "Dramatic irony occurs when:", options: ["The characters know the ending", "The playwright speaks directly", "The plot is complex", "The audience knows something the characters do not"], answer: 3 },
+        { q: "The setting of a literary work refers to:", options: ["The writer's life", "The moral lesson", "The main characters", "The time and place of the action"], answer: 3 },
+        { q: "The central message of a literary work is its:", options: ["Theme", "Plot", "Tone", "Setting"], answer: 0 },
+        { q: "The writer's attitude to the subject of a work is the:", options: ["Theme", "Plot", "Style", "Tone"], answer: 3 },
+        { q: "A story told from the viewpoint of a character who knows everything is told from the:", options: ["Objective point of view", "Limited point of view", "First-person point of view", "Omniscient point of view"], answer: 3 },
+        { q: "The use of a recurring image or idea that represents something deeper is:", options: ["Simile", "Rhyme", "Symbolism", "Alliteration"], answer: 2 },
+        { q: "A figure of speech in which a part stands for the whole is:", options: ["Irony", "Synecdoche", "Hyperbole", "Metonymy"], answer: 1 },
+        { q: "Giving human qualities to non-human things is:", options: ["Metaphor", "Simile", "Apostrophe", "Personification"], answer: 3 },
+        { q: "The pattern of rhyme in a poem is called the:", options: ["Metre", "Rhyme scheme", "Stanza", "Refrain"], answer: 1 },
+        { q: "A stanza of four lines is a:", options: ["Sestet", "Couplet", "Octave", "Quatrain"], answer: 3 },
+        { q: "A stanza of two rhyming lines is a:", options: ["Quatrain", "Couplet", "Tercet", "Octave"], answer: 1 },
+        { q: "The first eight lines of a Petrarchan sonnet are the:", options: ["Octave", "Couplet", "Sestet", "Quatrain"], answer: 0 },
+        { q: "A poem written in praise of someone or something is an:", options: ["Ballad", "Ode", "Elegy", "Lyric"], answer: 1 },
+        { q: "A poem that tells a story in short stanzas, often sung, is a:", options: ["Ballad", "Ode", "Sonnet", "Haiku"], answer: 0 },
+        { q: "A line repeated at intervals in a poem is a:", options: ["Refrain", "Metre", "Couplet", "Stanza"], answer: 0 },
+        { q: "Blank verse is poetry written in:", options: ["Ballad metre", "Free verse with no pattern", "Unrhymed iambic pentameter", "Rhymed couplets"], answer: 2 },
+        { q: "An iamb is a metrical foot consisting of:", options: ["An unstressed syllable followed by a stressed syllable", "A stressed syllable followed by an unstressed syllable", "Two stressed syllables", "Three syllables"], answer: 0 },
+        { q: "The author of 'Things Fall Apart' is:", options: ["Cyprian Ekwensi", "Chimamanda Adichie", "Chinua Achebe", "Wole Soyinka"], answer: 2 },
+        { q: "The protagonist of 'Things Fall Apart' is:", options: ["Unoka", "Okonkwo", "Obierika", "Nwoye"], answer: 1 },
+        { q: "Okonkwo's village in 'Things Fall Apart' is:", options: ["Abame", "Umuike", "Umuofia", "Mbanta"], answer: 2 },
+        { q: "The Nigerian writer who won the Nobel Prize in Literature in 1986 is:", options: ["Chinua Achebe", "Ben Okri", "J.P. Clark", "Wole Soyinka"], answer: 3 },
+        { q: "'Death and the King's Horseman' was written by:", options: ["Ola Rotimi", "Wole Soyinka", "Femi Osofisan", "Athol Fugard"], answer: 1 },
+        { q: "The play 'The Gods Are Not to Blame' was written by:", options: ["Ola Rotimi", "J.P. Clark", "Zulu Sofola", "Wole Soyinka"], answer: 0 },
+        { q: "The poet associated with the collection 'Labyrinths' is:", options: ["Gabriel Okara", "Niyi Osundare", "Christopher Okigbo", "J.P. Clark"], answer: 2 },
+        { q: "'The Palm-Wine Drinkard' was written by:", options: ["Amos Tutuola", "Ngugi wa Thiong'o", "Chinua Achebe", "Cyprian Ekwensi"], answer: 0 },
+        { q: "The Kenyan writer of 'A Grain of Wheat' and 'Weep Not, Child' is:", options: ["Ngugi wa Thiong'o", "Wole Soyinka", "Chinua Achebe", "Nuruddin Farah"], answer: 0 },
+        { q: "The author of 'Half of a Yellow Sun' is:", options: ["Chimamanda Ngozi Adichie", "Mariama Bâ", "Buchi Emecheta", "Flora Nwapa"], answer: 0 },
+        { q: "The author of 'Efuru', regarded as the first novel by a Nigerian woman published internationally, is:", options: ["Buchi Emecheta", "Chimamanda Adichie", "Flora Nwapa", "Zaynab Alkali"], answer: 2 },
+        { q: "The Elizabethan playwright who wrote 'Macbeth' is:", options: ["Christopher Marlowe", "William Shakespeare", "John Milton", "Ben Jonson"], answer: 1 },
+        { q: "In 'Macbeth', who persuades Macbeth to kill King Duncan?", options: ["The three witches only", "Banquo", "Lady Macbeth", "Macduff"], answer: 2 },
+        { q: "In 'Romeo and Juliet', the two feuding families are the:", options: ["Lancasters and Yorks", "Tudors and Stuarts", "Montagues and Capulets", "Hamlets and Ophelias"], answer: 2 },
+        { q: "In 'Julius Caesar', Caesar is killed on the:", options: ["Fourth of July", "Twenty-fifth of December", "Ides of March", "First of May"], answer: 2 },
+        { q: "The Shakespeare play in which a Venetian merchant must give a pound of flesh is:", options: ["Othello", "King Lear", "Hamlet", "The Merchant of Venice"], answer: 3 },
+        { q: "The villain in Shakespeare's 'Othello' is:", options: ["Brabantio", "Cassio", "Iago", "Roderigo"], answer: 2 },
+        { q: "The poem 'Ozymandias' was written by:", options: ["William Wordsworth", "Percy Bysshe Shelley", "John Keats", "Lord Byron"], answer: 1 },
+        { q: "The author of 'Paradise Lost' is:", options: ["Alexander Pope", "John Milton", "William Blake", "Geoffrey Chaucer"], answer: 1 },
+        { q: "The poet who wrote 'The Canterbury Tales' is:", options: ["Thomas Hardy", "Geoffrey Chaucer", "John Dryden", "John Donne"], answer: 1 },
+        { q: "The movement that stressed emotion, nature and imagination in 19th-century poetry is:", options: ["Modernism", "Romanticism", "Realism", "Classicism"], answer: 1 },
+        { q: "Oral literature in Africa includes:", options: ["Folktales, proverbs and praise songs", "Only newspapers", "Only novels", "Only plays in English"], answer: 0 },
+        { q: "'Song of Lawino' was written by:", options: ["Taban lo Liyong", "Gabriel Okara", "Okot p'Bitek", "Niyi Osundare"], answer: 2 },
+        { q: "The concept of Negritude was championed by:", options: ["Wole Soyinka", "Christopher Okigbo", "Chinua Achebe", "Léopold Sédar Senghor"], answer: 3 }
+      ],
+      "Geography": [
+        { q: "The Earth's rotation on its axis causes:", options: ["Eclipses", "Day and night", "Seasons", "Tides"], answer: 1 },
+        { q: "The seasons on Earth are caused by:", options: ["The distance of the Sun only", "The Moon's gravity", "The Earth's rotation", "The tilt of the Earth's axis and its revolution round the Sun"], answer: 3 },
+        { q: "The line of latitude 0° is the:", options: ["Equator", "Tropic of Cancer", "Prime Meridian", "Arctic Circle"], answer: 0 },
+        { q: "The Tropic of Cancer lies at:", options: ["66½° North", "23½° South", "23½° North", "0°"], answer: 2 },
+        { q: "When it is 12 noon at 0° longitude, the local time at 30° East is:", options: ["2:00 pm", "10:00 am", "3:00 pm", "12:30 pm"], answer: 0 },
+        { q: "The outermost layer of the Earth is the:", options: ["Inner core", "Crust", "Outer core", "Mantle"], answer: 1 },
+        { q: "Rocks formed from cooled magma are:", options: ["Igneous rocks", "Organic rocks", "Metamorphic rocks", "Sedimentary rocks"], answer: 0 },
+        { q: "Granite is an example of an:", options: ["Sedimentary rock", "Metamorphic rock", "Extrusive igneous rock", "Intrusive igneous rock"], answer: 3 },
+        { q: "Limestone is a:", options: ["Metamorphic rock", "Volcanic rock", "Igneous rock", "Sedimentary rock"], answer: 3 },
+        { q: "Marble is formed from the metamorphism of:", options: ["Limestone", "Sandstone", "Granite", "Shale"], answer: 0 },
+        { q: "The breaking down of rocks in situ by weather is:", options: ["Weathering", "Deposition", "Erosion", "Transportation"], answer: 0 },
+        { q: "Chemical weathering is most active in:", options: ["Polar regions", "Cold dry climates", "Deserts only", "Hot, wet climates"], answer: 3 },
+        { q: "The movement of weathered materials by wind, water or ice is:", options: ["Weathering", "Erosion", "Folding", "Deposition only"], answer: 1 },
+        { q: "A fold in the Earth's crust with the layers arching upward is an:", options: ["Rift", "Fault", "Syncline", "Anticline"], answer: 3 },
+        { q: "The Great Rift Valley of East Africa was formed by:", options: ["Faulting", "Folding", "Glaciation", "Volcanism only"], answer: 0 },
+        { q: "A volcano that has erupted in recent times and may erupt again is:", options: ["Extinct", "Dormant only", "Dead", "Active"], answer: 3 },
+        { q: "The imaginary line joining places of equal height on a map is a:", options: ["Contour line", "Isotherm", "Isobar", "Meridian"], answer: 0 },
+        { q: "On a map of scale 1 : 50,000, a distance of 4 cm represents:", options: ["200 m", "20 km", "4 km", "2 km"], answer: 3 },
+        { q: "The scale 1 cm to 5 km is equivalent to the representative fraction:", options: ["1 : 50,000", "1 : 5,000", "1 : 5,000,000", "1 : 500,000"], answer: 3 },
+        { q: "The instrument used to measure atmospheric pressure is the:", options: ["Hygrometer", "Thermometer", "Barometer", "Anemometer"], answer: 2 },
+        { q: "Lines joining places of equal atmospheric pressure are:", options: ["Contours", "Isobars", "Isohyets", "Isotherms"], answer: 1 },
+        { q: "The wind blowing from the Sahara to West Africa during the dry season is the:", options: ["Westerlies", "Doldrums", "South-West Monsoon", "Harmattan (North-East Trade Wind)"], answer: 3 },
+        { q: "The wind that brings rain to Nigeria is the:", options: ["Harmattan", "Tropical continental air mass", "Polar easterlies", "Tropical maritime (South-West) air mass"], answer: 3 },
+        { q: "Which type of rainfall is common in the equatorial region?", options: ["Relief rainfall", "Convectional rainfall", "Frontal rainfall", "Cyclonic rainfall only"], answer: 1 },
+        { q: "Rainfall caused by moist air forced to rise over mountains is:", options: ["Relief (orographic) rainfall", "Frontal rainfall", "Cyclonic rainfall", "Convectional rainfall"], answer: 0 },
+        { q: "The climate type with high temperature and heavy rainfall all year is:", options: ["Mediterranean climate", "Desert climate", "Equatorial climate", "Savanna climate"], answer: 2 },
+        { q: "The vegetation of the Sudan savanna is mainly:", options: ["Tundra", "Dense tall forest", "Mangrove", "Short grasses with scattered thorny trees"], answer: 3 },
+        { q: "The vegetation of coastal swamps in Nigeria is:", options: ["Sahel savanna", "Montane", "Mangrove forest", "Rain forest"], answer: 2 },
+        { q: "The longest river in Africa is the:", options: ["Congo", "Zambezi", "Niger", "Nile"], answer: 3 },
+        { q: "The river that forms a large delta in southern Nigeria is the:", options: ["Niger", "Cross", "Benue", "Ogun"], answer: 0 },
+        { q: "The highest mountain in Africa is:", options: ["Atlas", "Mount Kenya", "Mount Cameroon", "Mount Kilimanjaro"], answer: 3 },
+        { q: "The highest mountain in West Africa is:", options: ["Mount Cameroon", "Jos Plateau", "Mount Kilimanjaro", "Obudu Plateau"], answer: 0 },
+        { q: "The largest lake in Africa by area is:", options: ["Lake Tanganyika", "Lake Kariba", "Lake Chad", "Lake Victoria"], answer: 3 },
+        { q: "The Kainji Dam in Nigeria is built on the:", options: ["River Kaduna", "River Benue", "River Cross", "River Niger"], answer: 3 },
+        { q: "The process by which a river deposits materials at its mouth to form a delta is:", options: ["Deposition", "Erosion", "Weathering", "Attrition"], answer: 0 },
+        { q: "A U-shaped valley is formed by:", options: ["Marine erosion", "Wind erosion", "River erosion", "Glacial erosion"], answer: 3 },
+        { q: "An ox-bow lake is formed by:", options: ["A glacier", "A meander cut off from a river", "Volcanic activity", "Wind erosion"], answer: 1 },
+        { q: "Sea waves erode cliffs mainly through:", options: ["Wind only", "Plant roots", "Chemical weathering only", "Hydraulic action and abrasion"], answer: 3 },
+        { q: "The population distribution of a country is described by its:", options: ["Population density", "Dependency ratio", "Birth rate", "Literacy rate"], answer: 0 },
+        { q: "A country's population is 120 million and its area is 600,000 km². Its density is:", options: ["720 persons per km²", "2,000 persons per km²", "20 persons per km²", "200 persons per km²"], answer: 3 },
+        { q: "The movement of people out of rural areas to towns is:", options: ["Rural-urban migration", "Emigration", "Transhumance", "Immigration"], answer: 0 },
+        { q: "The major cash crop grown in the forest belt of South-Western Nigeria is:", options: ["Groundnut", "Millet", "Cotton", "Cocoa"], answer: 3 },
+        { q: "Groundnuts and cotton are mainly grown in:", options: ["The Coastal belt", "Northern Nigeria", "The Niger Delta", "The South-East"], answer: 1 },
+        { q: "The mineral from which aluminium is extracted is:", options: ["Galena", "Bauxite", "Haematite", "Cassiterite"], answer: 1 },
+        { q: "Tin ore is mined mainly on the:", options: ["Chad Basin", "Jos Plateau", "Cross River Basin", "Niger Delta"], answer: 1 },
+        { q: "Crude oil in Nigeria is found mainly in the:", options: ["Benue Valley only", "Jos Plateau", "Niger Delta", "Chad Basin"], answer: 2 },
+        { q: "The cheapest means of transporting heavy bulky goods over long distances is:", options: ["Water transport", "Road transport", "Pipeline only", "Air transport"], answer: 0 },
+        { q: "An organisation of West African countries for economic cooperation is:", options: ["BRICS", "NATO", "OPEC", "ECOWAS"], answer: 3 },
+        { q: "A climatic region with very little rainfall, hot days and cold nights is a:", options: ["Mediterranean region", "Equatorial region", "Desert", "Savanna"], answer: 2 },
+        { q: "The layer of the atmosphere that contains the ozone layer is the:", options: ["Exosphere", "Troposphere", "Stratosphere", "Mesosphere"], answer: 2 }
+      ],
+      "Agricultural Science": [
+        { q: "The main source of organic matter in the soil is:", options: ["Gravel", "Clay minerals", "Sand particles", "Decayed plant and animal remains (humus)"], answer: 3 },
+        { q: "The soil horizon rich in humus and the most fertile is the:", options: ["B-horizon", "R-horizon", "A-horizon", "C-horizon"], answer: 2 },
+        { q: "Soil texture refers to:", options: ["The pH of the soil", "The colour of the soil", "The relative proportions of sand, silt and clay", "The depth of the soil"], answer: 2 },
+        { q: "The soil with the highest water-holding capacity is:", options: ["Loamy sand", "Sandy soil", "Clay soil", "Gravelly soil"], answer: 2 },
+        { q: "The process of losing nutrients below the root zone through percolating water is:", options: ["Capillarity", "Erosion", "Leaching", "Transpiration"], answer: 2 },
+        { q: "The pH of an acidic soil can be raised by adding:", options: ["Sulphur", "Lime", "Superphosphate", "Ammonium sulphate"], answer: 1 },
+        { q: "Soil erosion is best controlled on slopes by:", options: ["Terracing and contour ploughing", "Bush burning", "Overgrazing", "Clean weeding"], answer: 0 },
+        { q: "The practice of growing different crops in succession on the same land is:", options: ["Fallowing", "Mixed cropping", "Monocropping", "Crop rotation"], answer: 3 },
+        { q: "A leguminous crop is useful in a rotation because it:", options: ["Uses a lot of water", "Removes all nutrients", "Fixes atmospheric nitrogen in the soil", "Controls erosion only"], answer: 2 },
+        { q: "Which of the following is a primary tillage operation?", options: ["Ploughing", "Harrowing", "Ridging", "Weeding"], answer: 0 },
+        { q: "Which implement is used for secondary tillage to break soil clods?", options: ["Sprayer", "Harrow", "Combine harvester", "Plough"], answer: 1 },
+        { q: "The recommended spacing for maize is about:", options: ["10 m × 10 m", "3 m × 3 m", "5 cm × 5 cm", "75 cm between rows and 25–30 cm within rows"], answer: 3 },
+        { q: "The control of weeds by the use of chemicals is:", options: ["Chemical control", "Cultural control", "Mechanical control", "Biological control"], answer: 0 },
+        { q: "The use of natural enemies to control pests is:", options: ["Legal control", "Chemical control", "Cultural control", "Biological control"], answer: 3 },
+        { q: "A fungal disease of yam is:", options: ["Swollen shoot virus", "Black pod only", "Newcastle disease", "Yam anthracnose"], answer: 3 },
+        { q: "Cassava mosaic disease is caused by a:", options: ["Nematode", "Virus", "Bacterium", "Fungus"], answer: 1 },
+        { q: "The cocoa swollen shoot disease is spread by:", options: ["Aphids", "Weevils", "Termites", "Mealybugs"], answer: 3 },
+        { q: "The storage pest of maize grains is:", options: ["Stem borer", "Locust", "Weevil", "Armyworm"], answer: 2 },
+        { q: "The best moisture content for storing grains safely is about:", options: ["50%", "25–30%", "40%", "12–14%"], answer: 3 },
+        { q: "The nutrient needed for root development and early growth is:", options: ["Potassium", "Nitrogen", "Calcium", "Phosphorus"], answer: 3 },
+        { q: "A deficiency of nitrogen in crops shows as:", options: ["Stunted roots only", "Purple stems", "Yellowing of older leaves (chlorosis)", "Black leaves"], answer: 2 },
+        { q: "The fertiliser with the highest percentage of nitrogen is:", options: ["Single superphosphate", "Ammonium sulphate", "Urea", "NPK 15-15-15"], answer: 2 },
+        { q: "An NPK fertiliser labelled 20-10-10 contains 20% of:", options: ["Potassium", "Phosphorus", "Calcium", "Nitrogen"], answer: 3 },
+        { q: "The application of a fertiliser along the side of a row of crops is:", options: ["Foliar application", "Side dressing", "Top spraying", "Broadcasting"], answer: 1 },
+        { q: "The cattle breed commonly found in Northern Nigeria is:", options: ["Friesian", "Hereford", "White Fulani", "Jersey"], answer: 2 },
+        { q: "The cattle breed known for high milk production is:", options: ["Kuri", "Muturu", "Friesian", "Sokoto Gudali"], answer: 2 },
+        { q: "The Large White is a breed of:", options: ["Sheep", "Pig", "Cattle", "Poultry"], answer: 1 },
+        { q: "A breed of poultry kept for both meat and egg production (dual purpose) is:", options: ["Rhode Island Red", "Broiler strain", "White Leghorn", "Muscovy duck"], answer: 0 },
+        { q: "The Yankasa breed is a breed of:", options: ["Cattle", "Pig", "Goat", "Sheep"], answer: 3 },
+        { q: "The Red Sokoto goat is also known as:", options: ["West African Dwarf", "Maradi goat", "Alpine", "Boer goat"], answer: 1 },
+        { q: "The system of keeping animals on a restricted area with feed and water supplied is:", options: ["Nomadic system", "Extensive system", "Intensive system", "Free range"], answer: 2 },
+        { q: "A feed that supplies mainly energy is:", options: ["Maize", "Bone meal", "Groundnut cake", "Fish meal"], answer: 0 },
+        { q: "A feed that supplies mainly protein is:", options: ["Groundnut cake", "Rice bran only", "Cassava peels", "Maize"], answer: 0 },
+        { q: "Bone meal is added to feed to supply:", options: ["Vitamin C", "Energy", "Calcium and phosphorus", "Protein"], answer: 2 },
+        { q: "Gestation period of a cow is about:", options: ["3 months", "12 months", "5 months", "9 months"], answer: 3 },
+        { q: "The gestation period of a pig is about:", options: ["200 days", "114 days (about 3 months, 3 weeks, 3 days)", "365 days", "30 days"], answer: 1 },
+        { q: "A disease of cattle transmitted by the tsetse fly is:", options: ["Brucellosis", "Anthrax", "Trypanosomiasis", "Rinderpest"], answer: 2 },
+        { q: "Foot-and-mouth disease is caused by a:", options: ["Virus", "Bacterium", "Protozoan", "Fungus"], answer: 0 },
+        { q: "Coccidiosis in poultry is caused by:", options: ["A fungus", "A protozoan", "A virus", "A bacterium"], answer: 1 },
+        { q: "The act of removing the horns of young cattle is:", options: ["Dehorning", "Docking", "Culling", "Castration"], answer: 0 },
+        { q: "The removal of unproductive animals from a herd is:", options: ["Culling", "Castration", "Grading", "Dehorning"], answer: 0 },
+        { q: "The ratio of the quantity of feed consumed to the weight gained by an animal is the:", options: ["Dressing percentage", "Stocking rate", "Growth rate", "Feed conversion ratio"], answer: 3 },
+        { q: "The assistance given by government to farmers to reduce production costs is a:", options: ["Subsidy", "Tariff", "Tax", "Loan"], answer: 0 },
+        { q: "A cooperative society is formed by:", options: ["Foreign firms", "The government alone", "A single rich farmer", "Farmers pooling resources for mutual benefit"], answer: 3 },
+        { q: "The financial statement showing a farm's assets and liabilities at a given date is the:", options: ["Inventory", "Profit and loss account", "Cash book", "Balance sheet"], answer: 3 },
+        { q: "The difference between total revenue and total cost on a farm is:", options: ["Interest", "Capital", "Depreciation", "Profit"], answer: 3 },
+        { q: "Depreciation is:", options: ["The fall in the value of farm assets over time", "The rise in asset value", "A loan repayment", "A farm tax"], answer: 0 },
+        { q: "Which of these is a farm tool used for harvesting yam tubers?", options: ["Sickle", "Combine harvester", "Digger or hoe", "Seed drill"], answer: 2 },
+        { q: "An example of a farm power source that does not use fuel is:", options: ["Tractor", "Combine harvester", "Generator", "Animal traction"], answer: 3 },
+        { q: "The branch of agriculture that deals with the management of trees is:", options: ["Horticulture", "Agronomy", "Pedology", "Forestry"], answer: 3 }
+      ],
+      "Computer Studies": [
+        { q: "The binary equivalent of the decimal number 45 is:", options: ["100101", "101011", "110101", "101101"], answer: 3 },
+        { q: "The decimal equivalent of the binary number 11011 is:", options: ["27", "31", "25", "29"], answer: 0 },
+        { q: "The hexadecimal number 2F in decimal is:", options: ["27", "47", "37", "57"], answer: 1 },
+        { q: "The octal number 17 in decimal is:", options: ["13", "15", "14", "17"], answer: 1 },
+        { q: "Adding the binary numbers 1011 and 110 gives:", options: ["10101", "10001", "1101", "10011"], answer: 1 },
+        { q: "A logic gate whose output is 1 only when both inputs are 1 is the:", options: ["AND gate", "NOT gate", "NAND gate", "OR gate"], answer: 0 },
+        { q: "A logic gate whose output is 1 when at least one input is 1 is the:", options: ["XOR gate", "NOR gate", "OR gate", "AND gate"], answer: 2 },
+        { q: "A gate that reverses its input is the:", options: ["AND gate", "XOR gate", "OR gate", "NOT gate"], answer: 3 },
+        { q: "The output of a NAND gate is 0 when:", options: ["Only one input is 1", "Both inputs are 0", "Both inputs are 1", "Any input is 0"], answer: 2 },
+        { q: "An expression that is true when its inputs are different is the:", options: ["AND", "NOR", "XOR", "OR"], answer: 2 },
+        { q: "The part of the CPU that holds the address of the next instruction is the:", options: ["Program counter", "Accumulator", "Cache", "Control unit"], answer: 0 },
+        { q: "The correct order of the machine cycle is:", options: ["Fetch, execute, decode", "Execute, decode, fetch", "Fetch, decode, execute", "Decode, fetch, execute"], answer: 2 },
+        { q: "Cache memory is used to:", options: ["Print documents", "Speed up access to frequently used data", "Store files permanently", "Connect to the internet"], answer: 1 },
+        { q: "The type of memory that retains data when power is off is:", options: ["RAM", "Register", "Cache", "ROM"], answer: 3 },
+        { q: "The 'Von Neumann architecture' stores:", options: ["Only instructions", "Only data", "Nothing", "Both data and instructions in the same memory"], answer: 3 },
+        { q: "A software that manages hardware and provides services for applications is the:", options: ["Compiler", "Database", "Operating system", "Browser"], answer: 2 },
+        { q: "The process of loading the operating system into memory at start-up is:", options: ["Compiling", "Formatting", "Booting", "Partitioning"], answer: 2 },
+        { q: "The network device that connects different networks and forwards data between them is a:", options: ["Repeater", "Modem only", "Hub", "Router"], answer: 3 },
+        { q: "A network topology in which all nodes connect to a single central cable is:", options: ["Star topology", "Ring topology", "Mesh topology", "Bus topology"], answer: 3 },
+        { q: "The protocol suite used on the internet is:", options: ["SMTP only", "FTP only", "HTTP only", "TCP/IP"], answer: 3 },
+        { q: "The service that translates domain names into IP addresses is:", options: ["DNS", "DHCP", "SMTP", "HTTP"], answer: 0 },
+        { q: "A 'cookie' in web browsing is:", options: ["A search engine", "A program", "A small file stored by a website on the user's device", "A virus"], answer: 2 },
+        { q: "Encryption is used to:", options: ["Reduce file size", "Delete files", "Speed up the internet", "Protect data by converting it into unreadable code"], answer: 3 },
+        { q: "A DDoS attack is an attempt to:", options: ["Overload a service with traffic to make it unavailable", "Send e-mail", "Steal passwords only", "Format a disk"], answer: 0 },
+        { q: "Which of the following is an example of two-factor authentication?", options: ["Two passwords", "Password plus a one-time code sent to the phone", "Username only", "Fingerprint only"], answer: 1 },
+        { q: "The relational database language used to query data is:", options: ["SQL", "HTML", "XML", "CSS"], answer: 0 },
+        { q: "The SQL command used to retrieve data from a table is:", options: ["SELECT", "INSERT", "UPDATE", "DELETE"], answer: 0 },
+        { q: "The SQL command to add a new record is:", options: ["INSERT", "SELECT", "DROP", "DELETE"], answer: 0 },
+        { q: "A field that links two tables in a relational database is a:", options: ["Primary key", "Index", "Query", "Foreign key"], answer: 3 },
+        { q: "Removing repeated data in a database to improve design is:", options: ["Encryption", "Normalisation", "Indexing", "Compilation"], answer: 1 },
+        { q: "The output of this Python statement: print(7 // 2) is:", options: ["2", "3", "3.5", "4"], answer: 1 },
+        { q: "The output of print(2 ** 3) in Python is:", options: ["5", "8", "6", "9"], answer: 1 },
+        { q: "The output of print(10 % 3) in Python is:", options: ["3.33", "3", "0", "1"], answer: 3 },
+        { q: "In Python, the keyword used to define a function is:", options: ["def", "define", "func", "function"], answer: 0 },
+        { q: "In Python, the keyword used to repeat code a fixed number of times is:", options: ["for", "def", "if", "import"], answer: 0 },
+        { q: "The value of x after this code: x = 5; x = x + 3 is:", options: ["5", "3", "53", "8"], answer: 3 },
+        { q: "The output of print(len('school')) in Python is:", options: ["7", "6", "school", "5"], answer: 1 },
+        { q: "A data type used to store True or False is:", options: ["Integer", "String", "Boolean", "Float"], answer: 2 },
+        { q: "The flowchart symbol for input/output is a:", options: ["Parallelogram", "Rectangle", "Diamond", "Oval"], answer: 0 },
+        { q: "An algorithm must be:", options: ["Vague", "Infinite", "Finite, clear and unambiguous", "Random"], answer: 2 },
+        { q: "Debugging means:", options: ["Running a program", "Writing a program", "Deleting a program", "Finding and fixing errors in a program"], answer: 3 },
+        { q: "A programming error caused by wrong logic that gives incorrect results is a:", options: ["Hardware error", "Syntax error", "Logic error", "Compile-time error only"], answer: 2 },
+        { q: "Software that is free to use, change and share is:", options: ["Open-source software", "Shareware", "Malware", "Proprietary software"], answer: 0 },
+        { q: "Which type of software licence lets a user try a program for a limited time?", options: ["Freeware only", "Open source", "Public domain", "Shareware"], answer: 3 },
+        { q: "An ergonomic practice when using a computer for long hours is:", options: ["Working in the dark", "Slouching", "Taking regular breaks and having good posture", "Staring at the screen"], answer: 2 },
+        { q: "Illegally copying software is called:", options: ["Software piracy", "Phishing", "Spamming", "Hacking"], answer: 0 },
+        { q: "The use of the internet to buy and sell goods is:", options: ["E-mail", "E-learning", "E-banking only", "E-commerce"], answer: 3 },
+        { q: "The spreadsheet function used to count cells containing numbers is:", options: ["COUNT", "SUM", "AVERAGE", "LEN"], answer: 0 },
+        { q: "In a spreadsheet, a reference like $A$1 is called a/an:", options: ["Mixed reference", "Relative reference", "Circular reference", "Absolute reference"], answer: 3 },
+        { q: "The default cell address after pressing Ctrl + Home in a spreadsheet is:", options: ["B2", "A1", "A100", "Z1"], answer: 1 }
+      ],
+      "Civic Education": [
+        { q: "The process by which a person becomes a citizen of a country other than that of his birth is:", options: ["Birth", "Naturalisation", "Registration only", "Descent"], answer: 1 },
+        { q: "Under the 1999 Constitution, a Nigerian citizen by birth is a person born in Nigeria before independence whose parents or grandparents belong to a:", options: ["Foreign country", "Religious group only", "Community indigenous to Nigeria", "Colonial government"], answer: 2 },
+        { q: "The right of a person not to be held in slavery or servitude is part of the right to:", options: ["Freedom of movement", "Dignity of the human person", "Private and family life", "Freedom of expression"], answer: 1 },
+        { q: "Section 33 of the Nigerian Constitution protects the right to:", options: ["Dignity", "Fair hearing", "Life", "Freedom of religion"], answer: 2 },
+        { q: "A court order requiring a detained person to be brought before it so that the lawfulness of his detention may be examined is:", options: ["Mandamus", "Subpoena", "Injunction", "Habeas corpus"], answer: 3 },
+        { q: "The principle that everyone is equal before the law is:", options: ["Federal character", "Franchise", "Separation of powers", "Rule of law"], answer: 3 },
+        { q: "A society in which citizens freely choose their leaders and enjoy basic rights is a:", options: ["Oligarchy", "Monarchy", "Autocracy", "Democracy"], answer: 3 },
+        { q: "Which of the following is a principle of democracy?", options: ["Press censorship", "Hereditary rule", "Popular participation", "One-man rule"], answer: 2 },
+        { q: "Which of the following is an obstacle to democracy in Nigeria?", options: ["Electoral malpractice", "Independent judiciary", "Free press", "Rule of law"], answer: 0 },
+        { q: "The 'federal character principle' in Nigeria is meant to ensure:", options: ["Appointments of only one ethnic group", "Equal salaries for all", "Fair representation of all states in public appointments", "Preference for the largest state"], answer: 2 },
+        { q: "A system in which voters choose among candidates in a free and fair election is:", options: ["Direct democracy only", "Military rule", "Dictatorship", "Representative democracy"], answer: 3 },
+        { q: "The Independent National Electoral Commission (INEC) is responsible for:", options: ["Collecting taxes", "Making laws", "Interpreting laws", "Organising elections"], answer: 3 },
+        { q: "Voters' apathy refers to:", options: ["Excessive voting", "Lack of interest in voting or political activities", "Vote buying", "Electoral violence"], answer: 1 },
+        { q: "An example of electoral malpractice is:", options: ["Voter registration", "Ballot box snatching", "Using a voter's card", "Voting in secret"], answer: 1 },
+        { q: "The act of buying votes during elections is:", options: ["Campaigning", "Registration", "Canvassing", "Vote buying"], answer: 3 },
+        { q: "The law-making body at the state level in Nigeria is the:", options: ["State Executive Council", "National Assembly", "State House of Assembly", "High Court"], answer: 2 },
+        { q: "The head of a local government council is the:", options: ["Commissioner", "Chairman", "Governor", "Speaker"], answer: 1 },
+        { q: "Which of the following is a function of the Code of Conduct Bureau?", options: ["Receiving asset declarations from public officers", "Registering parties", "Prosecuting robbers", "Conducting elections"], answer: 0 },
+        { q: "Which body is empowered to combat corruption in public offices in Nigeria?", options: ["INEC", "Independent Corrupt Practices and Other Related Offences Commission (ICPC)", "NAFDAC", "FRSC"], answer: 1 },
+        { q: "The act of giving or receiving anything of value to influence an official's action is:", options: ["Charity", "Tipping honestly", "Gift-giving", "Bribery"], answer: 3 },
+        { q: "The misuse of public funds for personal use is:", options: ["Auditing", "Taxation", "Embezzlement", "Budgeting"], answer: 2 },
+        { q: "A major effect of corruption is:", options: ["Social justice", "Underdevelopment and loss of public confidence", "Better roads", "Economic growth"], answer: 1 },
+        { q: "Which of the following is a way of fighting corruption?", options: ["Weak laws", "Transparency and accountability in government", "Secrecy in public contracts", "Giving gifts to officials"], answer: 1 },
+        { q: "The right of citizens to obtain information held by public bodies is guaranteed by the:", options: ["Official Secrets Act", "Land Use Act", "Companies Act", "Freedom of Information Act"], answer: 3 },
+        { q: "The major goal of the National Youth Service Corps (NYSC) is:", options: ["To train soldiers", "To create political parties", "To promote national unity and integration", "To collect taxes"], answer: 2 },
+        { q: "The National Orientation Agency (NOA) is responsible for:", options: ["Conducting elections", "Enforcing traffic laws", "Mobilising citizens to support national values and policies", "Making laws"], answer: 2 },
+        { q: "National ideals include all of the following EXCEPT:", options: ["Corruption", "Self-reliance", "Justice", "Unity"], answer: 0 },
+        { q: "The Nigerian national pledge was written by:", options: ["Chief Obafemi Awolowo", "Pa Ernest Ikoli", "Dr Nnamdi Azikiwe", "Prof. Felicia Adebola Adedoyin"], answer: 3 },
+        { q: "Which of the following is a value that promotes honesty in society?", options: ["Greed", "Deceit", "Dishonesty", "Integrity"], answer: 3 },
+        { q: "The abuse of drugs among youths can lead to:", options: ["Mental disorders and crime", "Better health", "Peace", "Academic excellence"], answer: 0 },
+        { q: "HIV is NOT transmitted through:", options: ["Mother-to-child transmission", "Contaminated blood", "Unprotected sex", "Sharing a handshake with an infected person"], answer: 3 },
+        { q: "HIV/AIDS can be prevented by:", options: ["Taking antibiotics", "Staying in a hospital", "Abstinence and avoiding sharing sharp objects", "Eating well only"], answer: 2 },
+        { q: "Human trafficking is:", options: ["Legal migration for studies", "The recruitment and transportation of persons for exploitation", "Exporting goods", "Tourism"], answer: 1 },
+        { q: "The agency that fights human trafficking in Nigeria is:", options: ["FRSC", "NAPTIP", "NDLEA", "INEC"], answer: 1 },
+        { q: "The agency responsible for drug law enforcement in Nigeria is:", options: ["EFCC", "NAFDAC", "NDLEA", "NAPTIP"], answer: 2 },
+        { q: "Cultism in schools is dangerous because it:", options: ["Promotes unity of all students", "Increases scholarship", "Promotes violence, secrecy and crime", "Improves discipline"], answer: 2 },
+        { q: "A non-governmental organisation is one that is:", options: ["A political party", "Not part of the government and independent of it", "A military unit", "Owned by the government"], answer: 1 },
+        { q: "A good example of a civil society group in Nigeria is the:", options: ["Nigeria Bar Association", "INEC", "National Assembly", "Police"], answer: 0 },
+        { q: "The right of workers to form and join trade unions is part of the right to:", options: ["Right to life", "Freedom of association", "Freedom of movement", "Right to dignity"], answer: 1 },
+        { q: "Which is the primary function of the police in a democratic state?", options: ["Making laws", "Maintenance of law and order and protection of life and property", "Interpreting laws", "Printing money"], answer: 1 },
+        { q: "Peaceful coexistence among different religions in Nigeria is promoted by:", options: ["Religious extremism", "Religious tolerance", "Religious discrimination", "Religious intolerance"], answer: 1 },
+        { q: "An effective means of conflict resolution that involves a neutral third party is:", options: ["Mediation", "Avoidance", "Boycott", "Violence"], answer: 0 },
+        { q: "A situation where a person is entitled to enjoy rights without the interference of others describes:", options: ["Liberty", "Obligation", "Authority", "Obedience"], answer: 0 },
+        { q: "The primary role of the United Nations in the world is to:", options: ["Control oil prices", "Train armies of member states", "Maintain international peace and security", "Impose taxes"], answer: 2 },
+        { q: "The African Union replaced the:", options: ["League of Arab States", "ECOWAS", "Organisation of African Unity", "Commonwealth"], answer: 2 },
+        { q: "The Nigerian Constitution is the:", options: ["Church law", "Public opinion", "Supreme law of the land", "Local custom"], answer: 2 },
+        { q: "A citizen's duty includes:", options: ["Breaking the law", "Paying taxes and obeying the law", "Avoiding elections", "Destroying public property"], answer: 1 },
+        { q: "Which of these is a responsibility of the government to citizens?", options: ["Limiting freedom of religion", "Refusing to hold elections", "Provision of security, education and health care", "Imposing silence"], answer: 2 },
+        { q: "Public property should be protected because it:", options: ["Belongs to a single person", "Is for rich people only", "Is worthless", "Belongs to everyone and serves the community"], answer: 3 },
+        { q: "The minimum age for a person to contest the office of President of Nigeria is:", options: ["30 years", "25 years", "40 years", "35 years"], answer: 3 }
+      ],
+      "CRS": [
+        { q: "The doctrine that God is the creator of the heavens and the earth is found in the book of:", options: ["Isaiah", "Job", "Genesis", "Exodus"], answer: 2 },
+        { q: "According to Genesis 1, human beings were created to:", options: ["Worship idols", "Have dominion over creation and care for it", "Rest forever", "Live without work"], answer: 1 },
+        { q: "The consequence of Adam and Eve's disobedience was:", options: ["Becoming kings", "Their expulsion from the Garden of Eden", "Receiving more land", "Being made angels"], answer: 1 },
+        { q: "God's covenant with Noah was symbolised by the:", options: ["Ark", "Rainbow", "Ten Commandments", "Circumcision"], answer: 1 },
+        { q: "The tower of Babel was built to:", options: ["Make a name for themselves and avoid being scattered", "Honour God", "Defend the city", "House the Ark"], answer: 0 },
+        { q: "God's call of Abraham is recorded in:", options: ["Isaiah 6", "Genesis 12", "Exodus 3", "Joshua 1"], answer: 1 },
+        { q: "Abraham's faith was demonstrated when he agreed to:", options: ["Leave Isaac in Haran", "Offer Isaac as a sacrifice", "Build the temple", "Destroy Sodom"], answer: 1 },
+        { q: "The twin sons of Isaac and Rebecca were:", options: ["Cain and Abel", "Ephraim and Manasseh", "Esau and Jacob", "Moses and Aaron"], answer: 2 },
+        { q: "Joseph forgave his brothers because he believed that:", options: ["Pharaoh ordered it", "They were innocent", "God used their evil act for good", "He was a king"], answer: 2 },
+        { q: "God revealed himself to Moses by the name:", options: ["The Almighty only", "I AM WHO I AM", "Emmanuel", "The Lord of hosts only"], answer: 1 },
+        { q: "The tenth plague on Egypt led to the:", options: ["Death of Moses", "Parting of the Jordan", "Fall of Jericho", "Release of the Israelites"], answer: 3 },
+        { q: "The covenant at Mount Sinai was based on the:", options: ["Sermon on the Mount", "Ten Commandments", "Lord's Prayer", "Beatitudes"], answer: 1 },
+        { q: "The commandment 'Honour your father and your mother' teaches:", options: ["Respect for parents and elders", "Love for money", "Obedience to strangers", "Fear of death"], answer: 0 },
+        { q: "The Israelites' sin of making a golden calf shows:", options: ["Gratitude to God", "Obedience to Moses", "Their wealth", "Idolatry and lack of faith in God"], answer: 3 },
+        { q: "The leader who took the Israelites across the River Jordan was:", options: ["Aaron", "Joshua", "Samuel", "Moses"], answer: 1 },
+        { q: "Deborah is remembered in the Bible as a:", options: ["Judge and prophetess", "Wife of Gideon", "Mother of Samuel", "Queen of Israel"], answer: 0 },
+        { q: "Samson's strength was linked to his:", options: ["Wealth", "Weapons", "Nazirite vow (uncut hair)", "Armour"], answer: 2 },
+        { q: "Samuel's call by God taught him to:", options: ["Become a king", "Fight Goliath", "Listen and obey the word of God", "Build the temple"], answer: 2 },
+        { q: "David's sin of adultery with Bathsheba was exposed by the prophet:", options: ["Samuel", "Elijah", "Isaiah", "Nathan"], answer: 3 },
+        { q: "The wisdom of Solomon is best seen in his:", options: ["Prayer on Mount Carmel", "Flight from Saul", "Victory over Goliath", "Judgement between the two women claiming a child"], answer: 3 },
+        { q: "The prophet who confronted King Ahab and Jezebel over Naboth's vineyard was:", options: ["Elijah", "Amos", "Elisha", "Isaiah"], answer: 0 },
+        { q: "Amos is known for his message on:", options: ["Military conquest", "Temple building", "The Exile only", "Social justice"], answer: 3 },
+        { q: "The prophet who preached against idolatry using his marriage as an illustration was:", options: ["Jonah", "Micah", "Hosea", "Amos"], answer: 2 },
+        { q: "The prophet who warned Judah about the Babylonian captivity and wrote Lamentations (traditionally) was:", options: ["Daniel", "Isaiah", "Ezekiel", "Jeremiah"], answer: 3 },
+        { q: "The message of Jonah to Nineveh teaches that God:", options: ["Shows mercy to those who repent", "Hates foreigners", "Rewards only Israel", "Cannot forgive"], answer: 0 },
+        { q: "The birth of Jesus was foretold to Mary by:", options: ["Elizabeth", "Joseph", "Angel Gabriel", "Zechariah"], answer: 2 },
+        { q: "The Magnificat is the song of:", options: ["Hannah", "Zechariah", "Mary", "Elizabeth"], answer: 2 },
+        { q: "The beginning of Jesus' public ministry followed his:", options: ["Ascension", "Baptism by John and temptation in the wilderness", "Transfiguration", "Crucifixion"], answer: 1 },
+        { q: "The Beatitudes form part of the:", options: ["Sermon on the Mount", "Parable of the Sower", "Last Supper", "Farewell address"], answer: 0 },
+        { q: "In the Lord's Prayer, the words 'Give us this day our daily bread' express:", options: ["A complaint", "Greed", "Dependence on God for daily needs", "Fasting"], answer: 2 },
+        { q: "The parable of the talents teaches:", options: ["Faithful use of the gifts God gives", "Avoiding work", "Collecting taxes", "Burying treasure"], answer: 0 },
+        { q: "The parable of the prodigal son teaches:", options: ["That wandering is good", "That the elder son was wrong in staying", "That wealth is evil", "God's readiness to forgive a repentant sinner"], answer: 3 },
+        { q: "Jesus' miracle of healing the ten lepers shows that:", options: ["Only Jews are healed", "Faith is unnecessary", "Gratitude is important", "Healing is rare"], answer: 2 },
+        { q: "The transfiguration of Jesus took place on a:", options: ["Desert plain", "Mountain", "City square", "Boat"], answer: 1 },
+        { q: "The night before his death, Jesus instituted the:", options: ["Lord's Supper (Eucharist)", "Baptism", "Pentecost", "Sabbath"], answer: 0 },
+        { q: "Jesus was tried before the Roman governor:", options: ["Felix", "Caiaphas", "Herod Antipas only", "Pontius Pilate"], answer: 3 },
+        { q: "The resurrection of Jesus is the foundation of:", options: ["Christian hope and faith", "The Passover", "The Law of Moses", "The temple worship"], answer: 0 },
+        { q: "The Great Commission is found at the end of the Gospel of:", options: ["John", "Mark", "Matthew", "Luke"], answer: 2 },
+        { q: "The coming of the Holy Spirit at Pentecost enabled the apostles to:", options: ["Hide in fear", "Preach boldly in many languages", "Rebuild the temple", "Return to fishing"], answer: 1 },
+        { q: "The first Christian martyr was:", options: ["Paul", "Stephen", "Peter", "James"], answer: 1 },
+        { q: "The apostle to the Gentiles was:", options: ["James", "Paul", "John", "Peter"], answer: 1 },
+        { q: "The council of the apostles at Jerusalem discussed whether Gentile converts should:", options: ["Leave Rome", "Pay temple tax", "Observe Passover only", "Be circumcised"], answer: 3 },
+        { q: "Paul's teaching on spiritual gifts is mainly found in:", options: ["Romans 1", "1 Corinthians 12", "James 1", "Galatians 1"], answer: 1 },
+        { q: "The 'fruit of the Spirit' includes:", options: ["Anger, envy and strife", "Pride, greed and lust", "Wealth, power and fame", "Love, joy, peace and patience"], answer: 3 },
+        { q: "According to Paul, the greatest of faith, hope and love is:", options: ["Faith", "Prophecy", "Love", "Hope"], answer: 2 },
+        { q: "The Christian teaching that all people are one in Christ is stressed in:", options: ["Exodus 20", "Matthew 6", "Psalm 23", "Galatians 3:28"], answer: 3 },
+        { q: "Which book of the Bible says 'faith without works is dead'?", options: ["James", "Jude", "Hebrews", "Romans"], answer: 0 },
+        { q: "The Christian duty to care for widows and orphans is taught in:", options: ["John 3:16", "James 1:27", "Genesis 1:1", "Revelation 1:1"], answer: 1 },
+        { q: "The Gospel writer who was a physician and also wrote the Acts of the Apostles is:", options: ["Matthew", "John", "Luke", "Mark"], answer: 2 },
+        { q: "The man compelled to carry the cross of Jesus was:", options: ["Joseph of Arimathea", "Nicodemus", "Simon of Cyrene", "Barabbas"], answer: 2 }
+      ],
+      "Financial Accounting": [
+        { q: "The accounting equation is:", options: ["Assets = Liabilities + Capital", "Assets = Capital − Liabilities", "Capital = Assets + Liabilities", "Liabilities = Assets + Capital"], answer: 0 },
+        { q: "A business has capital of ₦500,000 and liabilities of ₦200,000. Its total assets are:", options: ["₦500,000", "₦700,000", "₦100,000", "₦300,000"], answer: 1 },
+        { q: "The purchase of goods for cash is recorded by debiting:", options: ["Cash account and crediting purchases account", "Purchases account and crediting capital", "Purchases account and crediting cash account", "Sales account and crediting cash"], answer: 2 },
+        { q: "Which of the following is a real account?", options: ["Machinery account", "Discount allowed account", "Salaries account", "Rent account"], answer: 0 },
+        { q: "The main purpose of a trial balance is to:", options: ["Prove all errors are absent", "Show the profit of the business", "Check the arithmetical accuracy of the ledger entries", "Show the financial position"], answer: 2 },
+        { q: "An error that will NOT be revealed by a trial balance is:", options: ["Error of omission", "Single-sided entry", "Wrong addition of an account", "Casting error in the ledger"], answer: 0 },
+        { q: "When a trial balance does not agree, the difference is temporarily placed in the:", options: ["Capital account", "Reserve account", "Drawings account", "Suspense account"], answer: 3 },
+        { q: "An asset costing ₦600,000 with a residual value of ₦60,000 and a useful life of 6 years has an annual straight-line depreciation of:", options: ["₦100,000", "₦90,000", "₦110,000", "₦60,000"], answer: 1 },
+        { q: "A machine costing ₦500,000 is depreciated at 20% on reducing balance. The depreciation for the second year is:", options: ["₦80,000", "₦100,000", "₦60,000", "₦120,000"], answer: 0 },
+        { q: "Depreciation is charged to:", options: ["The trading account", "The capital account", "The profit and loss account", "The balance sheet only"], answer: 2 },
+        { q: "The balance on the provision for depreciation account is shown in the balance sheet as:", options: ["An expense", "A deduction from the cost of the asset", "An addition to capital", "A liability"], answer: 1 },
+        { q: "Opening stock ₦20,000, purchases ₦180,000 and closing stock ₦30,000. The cost of goods sold is:", options: ["₦150,000", "₦170,000", "₦200,000", "₦230,000"], answer: 1 },
+        { q: "If sales are ₦250,000 and cost of goods sold is ₦170,000, the gross profit is:", options: ["₦170,000", "₦80,000", "₦250,000", "₦420,000"], answer: 1 },
+        { q: "A gross profit of ₦80,000 on sales of ₦250,000 gives a gross profit margin of:", options: ["3.1%", "80%", "32%", "25%"], answer: 2 },
+        { q: "Return inwards is deducted from:", options: ["Closing stock", "Expenses", "Purchases", "Sales"], answer: 3 },
+        { q: "Carriage inwards is treated in the:", options: ["Profit and loss account as income", "Trading account as an addition to purchases", "Balance sheet as an asset", "Capital account"], answer: 1 },
+        { q: "Carriage outwards is charged to the:", options: ["Balance sheet", "Appropriation account", "Trading account", "Profit and loss account"], answer: 3 },
+        { q: "Rent owing at the end of the year is shown in the balance sheet as a:", options: ["Capital", "Fixed asset", "Current liability", "Current asset"], answer: 2 },
+        { q: "Insurance paid in advance at the end of the year is shown as a:", options: ["Current asset", "Current liability", "Capital", "Fixed asset"], answer: 0 },
+        { q: "Rent paid for 12 months was ₦120,000, of which 3 months is prepaid. The rent expense for the year is:", options: ["₦120,000", "₦90,000", "₦40,000", "₦30,000"], answer: 1 },
+        { q: "A provision for doubtful debts of 5% is to be made on debtors of ₦400,000. The provision is:", options: ["₦200,000", "₦5,000", "₦2,000", "₦20,000"], answer: 3 },
+        { q: "An increase in the provision for doubtful debts is:", options: ["Added to gross profit", "Added to capital", "Charged to the profit and loss account", "Credited to the trading account"], answer: 2 },
+        { q: "Cash book balance is ₦85,000 debit. Unpresented cheques are ₦12,000 and lodgements not yet credited are ₦5,000. The balance on the bank statement is:", options: ["₦102,000", "₦92,000", "₦78,000", "₦72,000"], answer: 1 },
+        { q: "A petty cash book operated on the imprest system:", options: ["Records only large payments", "Is reimbursed with the exact amount spent", "Has no float", "Is never replenished"], answer: 1 },
+        { q: "Discount allowed to customers is treated as:", options: ["Income", "A liability", "An asset", "An expense"], answer: 3 },
+        { q: "The sales ledger control account is used to check the total of:", options: ["Debtors' balances", "Cash balances", "Stock balances", "Creditors' balances"], answer: 0 },
+        { q: "Stock of 100 units at ₦10 and 100 units at ₦12 were purchased in that order; 150 units were sold. Closing stock by FIFO is:", options: ["₦500", "₦750", "₦600", "₦550"], answer: 2 },
+        { q: "Stock of 100 units at ₦10 and 100 units at ₦12 were purchased in that order; 150 units were sold. Closing stock by LIFO is:", options: ["₦550", "₦500", "₦600", "₦1,100"], answer: 1 },
+        { q: "Stock is valued at the lower of cost and net realisable value according to the concept of:", options: ["Prudence", "Consistency", "Money measurement", "Going concern"], answer: 0 },
+        { q: "The assumption that a business will continue operating in the foreseeable future is the:", options: ["Entity concept", "Prudence concept", "Going concern concept", "Realisation concept"], answer: 2 },
+        { q: "The concept which treats the business as separate from its owner is the:", options: ["Materiality concept", "Business entity concept", "Going concern concept", "Consistency concept"], answer: 1 },
+        { q: "Matching expenses against the revenue earned in the same period is the:", options: ["Duality concept", "Realisation concept", "Entity concept", "Matching (accruals) concept"], answer: 3 },
+        { q: "Using the same accounting methods from year to year is the:", options: ["Materiality concept", "Prudence concept", "Consistency concept", "Going concern concept"], answer: 2 },
+        { q: "A partnership profit of ₦120,000 is shared between A and B in the ratio 3 : 2. A's share is:", options: ["₦60,000", "₦40,000", "₦72,000", "₦48,000"], answer: 2 },
+        { q: "A partner's capital is ₦200,000 and interest on capital is 10% per annum. The interest is:", options: ["₦20,000", "₦10,000", "₦2,000", "₦200,000"], answer: 0 },
+        { q: "The excess of the purchase price of a business over the value of its net assets is:", options: ["Depreciation", "Reserve", "Premium", "Goodwill"], answer: 3 },
+        { q: "When a new partner is admitted, assets are revalued using the:", options: ["Revaluation account", "Suspense account", "Realisation account", "Appropriation account"], answer: 0 },
+        { q: "The maximum amount of share capital a company may issue according to its memorandum is the:", options: ["Paid-up capital", "Authorised share capital", "Issued share capital", "Called-up capital"], answer: 1 },
+        { q: "Interest on debentures is:", options: ["Paid out of retained profit only", "A drawing", "A dividend", "An expense charged before arriving at net profit"], answer: 3 },
+        { q: "Shares issued above their nominal value result in:", options: ["A bonus issue", "Reduction of capital", "A share premium", "A discount on shares"], answer: 2 },
+        { q: "Preference shareholders are entitled to:", options: ["A variable dividend after ordinary shareholders", "A fixed dividend before ordinary shareholders", "No dividend", "Control of the company"], answer: 1 },
+        { q: "The surplus of income over expenditure in a club's income and expenditure account is added to the:", options: ["Capital of the treasurer", "Subscription account", "Bank loan", "Accumulated fund"], answer: 3 },
+        { q: "Prime cost in a manufacturing account is the sum of direct materials, direct labour and:", options: ["Factory overheads", "Selling expenses", "Direct expenses", "Office expenses"], answer: 2 },
+        { q: "Direct materials ₦80,000, direct labour ₦50,000 and direct expenses ₦10,000. The prime cost is:", options: ["₦60,000", "₦140,000", "₦130,000", "₦90,000"], answer: 1 },
+        { q: "A statement used to find the capital of a trader who keeps no proper books is the:", options: ["Cash flow statement", "Statement of affairs", "Trial balance", "Bank reconciliation"], answer: 1 },
+        { q: "Assets of ₦900,000 and liabilities of ₦350,000 give an opening capital of:", options: ["₦550,000", "₦1,250,000", "₦900,000", "₦350,000"], answer: 0 },
+        { q: "The book of original entry for non-cash transactions is the:", options: ["Journal", "Trial balance", "Ledger", "Cash book"], answer: 0 },
+        { q: "A transaction recorded on both sides of the cash book, such as paying cash into the bank, is a:", options: ["Journal entry", "Adjustment", "Contra entry", "Provision"], answer: 2 },
+        { q: "The current ratio is calculated as:", options: ["Current assets ÷ Current liabilities", "Fixed assets ÷ Capital", "Gross profit ÷ Sales", "Current liabilities ÷ Current assets"], answer: 0 },
+        { q: "Current assets of ₦300,000 and current liabilities of ₦150,000 give a current ratio of:", options: ["1 : 1", "1 : 2", "3 : 1", "2 : 1"], answer: 3 }
+      ]
+    };
+
+    let playerName = "Student";
+    let selectedSubject = "";
+    let questions = [];
+    let currentQuestionIndex = 0;
+    let userAnswers = [];
+    let timeLeft = 30 * 60; // 30 mins for 50 questions
+    let timerInterval = null;
+
+    // Shuffle options helper
+    function shuffleOptions(item) {
+      const originalCorrectOption = item.options[item.answer];
+      let mappedOptions = item.options.map((opt) => opt);
+      
+      for (let i = mappedOptions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [mappedOptions[i], mappedOptions[j]] = [mappedOptions[j], mappedOptions[i]];
+      }
+
+      const newAnswerIndex = mappedOptions.indexOf(originalCorrectOption);
+
+      return {
+        q: item.q,
+        options: mappedOptions,
+        answer: newAnswerIndex
+      };
+    }
+
+    function openSubjectSelection() {
+      const nameInput = document.getElementById("player-name").value.trim();
+      if (!nameInput && playerName === "Student") {
+        showDialog("Please enter your name before proceeding!");
+        return;
+      } else if (nameInput) {
+        playerName = nameInput;
+      }
+
+      document.getElementById("start-screen").style.display = "none";
+      document.getElementById("subject-screen").style.display = "block";
+
+      const container = document.getElementById("subject-buttons-container");
+      container.innerHTML = "";
+
+      const subjects = Object.keys(seniorClassSubjects);
+
+      subjects.forEach((subj) => {
+        const btn = document.createElement("button");
+        btn.className = "start-btn";
+        let displayName = subj.charAt(0).toUpperCase() + subj.slice(1);
+        btn.innerText = `${displayName} (50 Questions)`;
+        btn.onclick = () => startSubjectQuiz(subj);
+        container.appendChild(btn);
+      });
+    }
+
+    function startSubjectQuiz(subjectName) {
+      selectedSubject = subjectName;
+
+      document.getElementById("subject-screen").style.display = "none";
+      document.getElementById("score-screen").style.display = "none";
+      document.getElementById("quiz-screen").style.display = "block";
+
+      let displaySubjName = selectedSubject.charAt(0).toUpperCase() + selectedSubject.slice(1);
+      document.getElementById("current-stage-tag").innerText = `SENIOR CLASS • ${displaySubjName}`;
+
+      const rawQuestions = seniorClassSubjects[selectedSubject];
+      
+      // Shuffle questions & options
+      questions = rawQuestions
+        .map(q => shuffleOptions(q))
+        .sort(() => Math.random() - 0.5);
+
+      timeLeft = 30 * 60; // 30 minutes
+      userAnswers = new Array(questions.length).fill(null);
+      currentQuestionIndex = 0;
+
+      startTimer();
+      showQuestion();
+    }
+
+    function startTimer() {
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        const mins = Math.floor(timeLeft / 60);
+        const secs = timeLeft % 60;
+        document.getElementById("timer-display").innerText = 
+          `⏱ Time Remaining: ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          submitQuiz();
+        }
+      }, 1000);
+    }
+
+    function showQuestion() {
+      const qData = questions[currentQuestionIndex];
+      
+      document.getElementById("question-count").innerText = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+      document.getElementById("question-text").innerText = `${currentQuestionIndex + 1}. ${qData.q}`;
+      
+      const progressPercent = ((currentQuestionIndex + 1) / questions.length) * 100;
+      document.getElementById("progress-bar").style.width = `${progressPercent}%`;
+
+      const optionsContainer = document.getElementById("options-container");
+      optionsContainer.innerHTML = "";
+
+      const selectedAns = userAnswers[currentQuestionIndex];
+
+      qData.options.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn";
+        btn.innerText = `${String.fromCharCode(65 + idx)}. ${opt}`;
+
+        if (selectedAns !== null) {
+          btn.disabled = true;
+          if (idx === qData.answer) {
+            btn.classList.add("correct");
+          } else if (idx === selectedAns) {
+            btn.classList.add("wrong");
+          }
+        } else {
+          btn.onclick = () => selectOption(idx);
+        }
+
+        optionsContainer.appendChild(btn);
+      });
+
+      document.getElementById("prev-btn").style.visibility = currentQuestionIndex === 0 ? "hidden" : "visible";
+      document.getElementById("next-btn").style.visibility = currentQuestionIndex === questions.length - 1 ? "hidden" : "visible";
+
+      updateScoreTracker();
+    }
+
+    function selectOption(index) {
+      if (userAnswers[currentQuestionIndex] !== null) return;
+      userAnswers[currentQuestionIndex] = index;
+      showQuestion();
+    }
+
+    function changeQuestion(step) {
+      currentQuestionIndex += step;
+      showQuestion();
+    }
+
+    function updateScoreTracker() {
+      let score = 0;
+      userAnswers.forEach((ans, idx) => {
+        if (ans !== null && ans === questions[idx].answer) score++;
+      });
+      document.getElementById("score-tracker").innerText = `Score: ${score}`;
+    }
+
+    function showDialog(message, onConfirm, confirmText) {
+      const overlay = document.getElementById("dialog-overlay");
+      const yes = document.getElementById("dialog-yes");
+      const no = document.getElementById("dialog-no");
+      document.getElementById("dialog-message").textContent = message;
+      no.style.display = onConfirm ? "inline-block" : "none";
+      yes.textContent = confirmText || "OK";
+      overlay.style.display = "flex";
+      yes.onclick = () => { overlay.style.display = "none"; if (onConfirm) onConfirm(); };
+      no.onclick = () => { overlay.style.display = "none"; };
+    }
+
+    function confirmSubmit() {
+      const answeredCount = userAnswers.filter(a => a !== null).length;
+      let displaySubjName = selectedSubject.charAt(0).toUpperCase() + selectedSubject.slice(1);
+      showDialog(`Hello ${playerName}, you have answered ${answeredCount} of ${questions.length} questions in ${displaySubjName}. Submit test now?`, submitQuiz, "Yes, Submit");
+    }
+
+    function submitQuiz() {
+      clearInterval(timerInterval);
+
+      let score = 0;
+      userAnswers.forEach((ans, idx) => {
+        if (ans === questions[idx].answer) score++;
+      });
+
+      document.getElementById("quiz-screen").style.display = "none";
+      document.getElementById("score-screen").style.display = "block";
+
+      let displaySubjName = selectedSubject.charAt(0).toUpperCase() + selectedSubject.slice(1);
+      document.getElementById("stage-result-title").innerText = `Senior Class - ${displaySubjName}`;
+      document.getElementById("final-score").innerText = `${score} / ${questions.length}`;
+
+      let feedback = "";
+      const percent = (score / questions.length) * 100;
+
+      if (percent >= 90) {
+        feedback = `🌟 Exceptional performance, <strong>${playerName}</strong>! Mastery level in ${displaySubjName}!`;
+      } else if (percent >= 70) {
+        feedback = `👏 Great job, <strong>${playerName}</strong>! Very strong understanding of ${displaySubjName}!`;
+      } else if (percent >= 50) {
+        feedback = `👍 Good effort, <strong>${playerName}</strong>! You passed ${displaySubjName}, but keep practicing.`;
+      } else {
+        feedback = `📖 Keep studying <strong>${displaySubjName}</strong>, <strong>${playerName}</strong>, and give it another try!`;
+      }
+
+      document.getElementById("feedback-text").innerHTML = feedback;
+    }
+
+    function restartQuiz() {
+      document.getElementById("score-screen").style.display = "none";
+      document.getElementById("subject-screen").style.display = "block";
+    }
+  </script>
+</body>
+</html>
